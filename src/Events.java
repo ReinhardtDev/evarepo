@@ -1,15 +1,14 @@
 public class Events {
 
-    public String Bezeichnung;
-    public String Ort;
-    public String Datum;
-    public int Kontingent;
+    public String bezeichnung;
+    public String ort;
+    public String datum;
+    public int kontingent;
 
     public Events(String bezeichnung, String ort, String datum, int kontingent) {
-        Bezeichnung = bezeichnung;
-        Ort = ort;
-        Datum = datum;
-        Kontingent = kontingent;
+        this.bezeichnung = bezeichnung;
+        this.ort = ort;
+        this.datum = datum;
+        this.kontingent = kontingent;
     }
-
 }
