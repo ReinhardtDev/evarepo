@@ -1,10 +1,14 @@
 import java.util.ArrayList;
 
 public class EventService {
-    ArrayList<Events> events;
+    ArrayList<Event> events;
 
-    public EventService(ArrayList<Events> events) {
+    public EventService(ArrayList<Event> events) {
         this.events = events;
+    }
+
+    private void createEvent(Event event) {
+        events.add(event);
     }
 }
 
