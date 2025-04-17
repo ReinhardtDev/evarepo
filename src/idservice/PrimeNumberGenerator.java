@@ -41,6 +41,6 @@ public class PrimeNumberGenerator {
                 return i;
             }
         }
-        return i;
+        return -1;
     }
 }
