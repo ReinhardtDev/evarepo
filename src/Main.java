@@ -5,6 +5,9 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
+        PrimeNumberGenerator test = new PrimeNumberGenerator(1000000000L, 9999999999L);
+        test.generate(100);
+        /*
         try {
             EventService eventService = new EventService();
 
@@ -28,6 +31,6 @@ public class Main {
 
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-        }
+        } */
     }
 }
