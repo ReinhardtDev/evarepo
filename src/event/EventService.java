@@ -23,6 +23,9 @@ public class EventService {
         }
 
         long id = idService.generateID();
+        if (id == -1) {
+            throw new IllegalArgumentException("Couldn't generate an ID!");
+        }
         events.add(new Event(id, title, location, date, quota));
         return id;
     }

@@ -14,8 +14,11 @@ public class IDService {
 
     public long generateID() {
         long id = primeNumberGenerator.generate();
-        idStore.add(id);
-        return id;
+        if(id != -1) {
+            idStore.add(id);
+            return id;
+        }
+        return -1;
     }
 
     public void deleteID(long id) {
