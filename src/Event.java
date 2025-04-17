@@ -14,6 +14,26 @@ public class Event {
         this.kontingent = kontingent;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getBezeichnung() {
+        return bezeichnung;
+    }
+
+    public String getOrt() {
+        return ort;
+    }
+
+    public String getDatum() {
+        return datum;
+    }
+
+    public int getKontingent(){
+        return kontingent;
+    }
+
     @Override
     public String toString(){
         return bezeichnung + ":"

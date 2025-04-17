@@ -7,8 +7,20 @@ public class EventService {
         this.events = events;
     }
 
-    private void createEvent(Event event) {
+    public void createEvent(Event event) {
         events.add(event);
+    }
+
+    public void readEvent(int eventid){
+        System.out.println(events.get(eventid));
+    }
+
+    public void updateEvent(){
+
+    }
+
+    public void deleteEvent(){
+
     }
 }
 
