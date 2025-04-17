@@ -11,4 +11,12 @@ public class Events {
         this.datum = datum;
         this.kontingent = kontingent;
     }
+
+    @Override
+    public String toString(){
+        return bezeichnung + ":"
+                + "\n Datum: " + datum
+                + "\n Ort: " + ort
+                + "\n Ticketkontingent: " + kontingent;
+    }
 }
