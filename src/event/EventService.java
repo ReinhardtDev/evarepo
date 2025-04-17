@@ -1,5 +1,7 @@
 package event;
 
+import idservice.IDService;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,9 +10,10 @@ public class EventService {
 
     public EventService() {
         this.events = new ArrayList<>();
+        this.idService = new IDService();
     }
 
-    public int createEvent(String title, String location, LocalDate date, int quota) {
+    public long createEvent(String title, String location, LocalDate date, int quota) {
         if (quota < 0) {
             throw new IllegalArgumentException("The quota must not be negative!");
         }
@@ -19,10 +22,9 @@ public class EventService {
             throw new IllegalArgumentException("The event must take place in the future!");
         }
 
-        idCounter++;
-        events.add(new Event(idCounter, title, location, date, quota));
-
-        return idCounter;
+        long id = idService.generateID();
+        events.add(new Event(id, title, location, date, quota));
+        return id;
     }
 
     public void updateEvent(Event event) {
@@ -37,16 +39,17 @@ public class EventService {
         throw new IllegalArgumentException("Event with the ID = " + event.getId() + " does not exist!");
     }
 
-    public void deleteEvent(int id) {
+    public void deleteEvent(long id) {
         for (Event e : events ) {
             if (e.getId() == id) {
                 events.remove(e);
+                idService.deleteID(e.getId());
                 return;
             }
         }
     }
 
-    public Event getEventById(int id) {
+    public Event getEventById(long id) {
         for (Event e : events ) {
             if (e.getId() == id)
                 return e;
@@ -61,6 +64,6 @@ public class EventService {
 
     private ArrayList<Event> events;
 
-    private int idCounter;
+    private IDService idService;
 
 }

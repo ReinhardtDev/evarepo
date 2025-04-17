@@ -1,3 +1,5 @@
+package idservice;
+
 import java.util.ArrayList;
 
 public class PrimeNumberGenerator {
@@ -12,7 +14,7 @@ public class PrimeNumberGenerator {
         this.primzahlen = new ArrayList<>();
     }
 
-    public void generate(int anzahl) {
+    public long generate() {
         long i;
         long y;
         long flg;
@@ -35,11 +37,10 @@ public class PrimeNumberGenerator {
             // if flag is 0 then x is not prime
             if (flg == 1) {
                 primzahlen.add(i);
-                System.out.print(i + "\n");
-                if(primzahlen.size() == anzahl) {
-                    break;
-                }
+                this.lower = i + 1;
+                return i;
             }
         }
+        return i;
     }
 }
