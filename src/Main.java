@@ -5,7 +5,9 @@ import event.Event;
 public class Main {
     public static void main(String[] args) {
 
-        try {
+        Client client = new Client();
+        client.readUserChoice();
+        /*try {
             EventService eventService = new EventService();
             long buchmesseId = eventService.createEvent("Buchmesse", "Leipzig", LocalDate.parse("2026-03-29"), 1000);
             long laternenfestId =  eventService.createEvent("Laternenfest", "Halle", LocalDate.parse("2025-08-29"), 2000);
@@ -26,6 +28,6 @@ public class Main {
 
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-        }
+        }*/
     }
 }
