@@ -14,7 +14,15 @@ public class Client {
     private long scanEventId(){
         System.out.println("Event ID: ");
         Scanner eventIdScanner = new Scanner(System.in);
-        return Long.parseLong(eventIdScanner.nextLine());
+
+        try{
+            long eventId = eventIdScanner.nextLong();
+            eventService.getEventById(eventId);
+            return eventId;
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+        return 0;
     }
 
     private int scanUserChoice(){
@@ -94,24 +102,28 @@ public class Client {
 
         switch (scanUserChoice()) {
             case 1 -> {
+                System.out.println("Titel: ");
                 Scanner titleScanner = new Scanner(System.in);
                 eventService.getEventById(id).setTitle(titleScanner.nextLine());
                 System.out.println("Titel wurde erfolgreich geändert");
                 readUserChoice();
             }
             case 2 -> {
+                System.out.println("Location: ");
                 Scanner locationScanner = new Scanner(System.in);
                 eventService.getEventById(id).setLocation(locationScanner.nextLine());
                 System.out.println("Location wurde erfolgreich geändert");
                 readUserChoice();
             }
             case 3 -> {
+                System.out.println("Datum: ");
                 Scanner dateScanner = new Scanner(System.in);
                 eventService.getEventById(id).setDate(LocalDate.parse(dateScanner.nextLine()));
                 System.out.println("Datum wurde erfolgreich geändert");
                 readUserChoice();
             }
             case 4 -> {
+                System.out.println("Quota: ");
                 Scanner quotaScanner = new Scanner(System.in);
                 eventService.getEventById(id).setQuota(Integer.parseInt(quotaScanner.nextLine()));
                 System.out.println("Quota wurde erfolgreich geändert");
