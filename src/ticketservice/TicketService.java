@@ -28,6 +28,10 @@ public class TicketService {
 
         Kunde kunde = customerService.getCustomerByID(customerId);
 
+        if(kunde.isMaxTicketAmount(eventId)) {
+            return 1;
+        }
+
         long ticketId = idService.generateID();
         tickets.add(new Ticket(ticketId, purchaseDate, customerId, eventId));
         eventService.reduceQuota(event);
