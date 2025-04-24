@@ -6,15 +6,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CustomerService {
-    private ArrayList<Kunden> customers;
+    private ArrayList<Kunde> customers;
     private IDService idService;
 
-    public CustomerService(ArrayList<Kunden> customers, IDService idService) {
+    public CustomerService(ArrayList<Kunde> customers, IDService idService) {
         this.customers = customers;
         this.idService = idService;
     }
 
-    public Kunde createCustomer(String username, String email, LocalDate birthdate) {
+    public long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(birthdate.isAfter(LocalDate.now().minusYears(18L))) {
             throw new IllegalArgumentException("Muss mindestens 18 Jahre alt sein.");
@@ -22,5 +22,16 @@ public class CustomerService {
 
         long customerID = idService.generateID();
         customers.add(new Kunde(customerID, username, email, birthdate));
+        return customerID;
+    }
+
+    public Kunde getCustomerByID(long id) {
+        for(Kunde kunde: customers) {
+            if(kunde.getId() == id) {
+                return kunde;
+            }
+        }
+
+        throw new IllegalArgumentException("Kunde mit ID " + id + "nicht gefunden.");
     }
 }
