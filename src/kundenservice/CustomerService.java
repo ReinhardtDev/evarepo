@@ -9,8 +9,8 @@ public class CustomerService {
     private ArrayList<Kunde> customers;
     private IDService idService;
 
-    public CustomerService(ArrayList<Kunde> customers, IDService idService) {
-        this.customers = customers;
+    public CustomerService(IDService idService) {
+        this.customers = new ArrayList<>();
         this.idService = idService;
     }
 
@@ -33,5 +33,26 @@ public class CustomerService {
         }
 
         throw new IllegalArgumentException("Kunde mit ID " + id + "nicht gefunden.");
+    }
+
+    public void deleteCustomer(long id) {
+        for(Kunde kunde: customers) {
+            if(kunde.getId() == id) {
+                customers.remove(kunde);
+                idService.deleteID(id);
+                System.out.println("Customer successfully deleted.");
+            }
+        }
+    }
+
+    public ArrayList<Kunde> getAllCustomer() {
+        return customers;
+    }
+
+    public void deleteAllCustomers() {
+        for(Kunde kunde: customers) {
+            idService.deleteID(kunde.getId());
+        }
+        customers.clear();
     }
 }
