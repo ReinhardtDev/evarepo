@@ -46,4 +46,11 @@ public class Ticket {
     public void setEventId(long eventId) {
         this.eventId = eventId;
     }
+
+    @Override
+    public String toString() {
+        return "ticket id='" + this.id + '\'' + ",\n" +
+                "purchase date='" + this.purchaseDate + '\'' + ",\n" +
+                "customer id=" + this.customerId + ",\n" +
+                "event id=" + id;     }
 }
