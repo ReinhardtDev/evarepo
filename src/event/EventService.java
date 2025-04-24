@@ -30,18 +30,6 @@ public class EventService {
         return id;
     }
 
-    public void updateEvent(Event event) {
-        int i = 0;
-        for (Event e : events) {
-            if (e.getId() == event.getId()) {
-                events.set(i, event);
-                return;
-            }
-            i++;
-        }
-        throw new IllegalArgumentException("Event with the ID = " + event.getId() + " does not exist!");
-    }
-
     public void deleteEvent(long id) {
         for (Event e : events ) {
             if (e.getId() == id) {
@@ -69,4 +57,7 @@ public class EventService {
 
     private IDService idService;
 
+    public void reduceQuota(Event event){
+        event.setQuota(event.getQuota() - 1);
+    }
 }
