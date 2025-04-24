@@ -16,9 +16,21 @@ public class CustomerService {
 
     public long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
+        if(username.isEmpty()) {
+            throw new IllegalArgumentException("Username is Invalid");
+        }
+
+
+
+        if(email.isEmpty()) {
+            throw new IllegalArgumentException("Email is Invalid");
+        }
+
         if(birthdate.isAfter(LocalDate.now().minusYears(18L))) {
             throw new IllegalArgumentException("Muss mindestens 18 Jahre alt sein.");
         }
+
+
 
         long customerID = idService.generateID();
         customers.add(new Kunde(customerID, username, email, birthdate));

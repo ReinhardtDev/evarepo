@@ -47,4 +47,11 @@ public class Kunde {
     public void setGeburtsdatum(LocalDate geburtsdatum) {
         this.geburtsdatum = geburtsdatum;
     }
+
+    @Override
+    public String toString(){
+        return "username='" + this.nutzername + '\'' + ",\n" +
+                "email='" + this.email + '\'' + ",\n" +
+                "birthdate=" + this.geburtsdatum + ",\n" +
+                "id=" + id;    }
 }
