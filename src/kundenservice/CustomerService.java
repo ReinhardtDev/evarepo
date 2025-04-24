@@ -4,8 +4,6 @@ import idservice.IDService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CustomerService {
     private ArrayList<Kunde> customers;
@@ -17,10 +15,12 @@ public class CustomerService {
     }
 
     public boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        if (email.contains("@") && email.contains(".")) {
+            String[] part1 = email.split("@");
+            String[] part2 = part1[1].split("\\.");
+            return !part1[0].isEmpty() && !part2[0].isEmpty() && !part2[1].isEmpty();
+        }
+        return false;
     }
 
     public long createCustomer(String username, String email, LocalDate birthdate) {
