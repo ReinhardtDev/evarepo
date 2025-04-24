@@ -53,6 +53,16 @@ public class Kunde {
         this.geburtsdatum = geburtsdatum;
     }
 
+    public boolean isMaxTicketAmount(long eventId) {
+        int count = 0;
+        for (Ticket ticket : tickets) {
+            if (ticket.getEventId() == eventId) {
+                count++;
+            }
+        }
+        return count >= 5;
+    }
+
     @Override
     public String toString(){
         return "username='" + this.nutzername + '\'' + ",\n" +
