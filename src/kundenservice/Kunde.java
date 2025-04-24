@@ -4,19 +4,19 @@ import java.time.LocalDate;
 
 public class Kunde {
 
-    private int id;
+    private long id;
     private String nutzername;
     private String email;
     private LocalDate geburtsdatum;
 
-    public Kunde(int id, String nutzername, String email, LocalDate geburtsdatum){
+    public Kunde(long id, String nutzername, String email, LocalDate geburtsdatum){
         this.id = id;
         this.nutzername = nutzername;
         this.email = email;
         this.geburtsdatum = geburtsdatum;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
