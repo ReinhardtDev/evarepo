@@ -1,11 +1,12 @@
 import event.EventService;
 import java.time.LocalDate;
 import event.Event;
+import idservice.IDService;
 
 public class Main {
     public static void main(String[] args) {
-
-        Client client = new Client();
+        IDService idService = new IDService();
+        Client client = new Client(idService);
         client.readUserChoice();
         /*try {
             EventService eventService = new EventService();

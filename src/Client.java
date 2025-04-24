@@ -1,5 +1,6 @@
 import event.Event;
 import event.EventService;
+import idservice.IDService;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -7,8 +8,8 @@ import java.util.Scanner;
 
 public class Client {
     private final EventService eventService;
-    public Client() {
-        this.eventService = new EventService();
+    public Client(IDService idService) {
+        this.eventService = new EventService(idService);
     }
 
     private long scanEventId(){

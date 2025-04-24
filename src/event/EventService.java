@@ -8,9 +8,9 @@ import java.util.Collection;
 
 public class EventService {
 
-    public EventService() {
+    public EventService(IDService idService) {
         this.events = new ArrayList<>();
-        this.idService = new IDService();
+        this.idService = idService;
     }
 
     public long createEvent(String title, String location, LocalDate date, int quota) {
