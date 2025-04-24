@@ -10,8 +10,8 @@ public class CustomerService {
     private IDService idService;
 
     public CustomerService(IDService idService) {
-        this.customers = new ArrayList<>();
         this.idService = idService;
+        this.customers = new ArrayList<>();
     }
 
     public long createCustomer(String username, String email, LocalDate birthdate) {

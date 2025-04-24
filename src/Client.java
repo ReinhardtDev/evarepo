@@ -1,19 +1,24 @@
 import event.Event;
 import event.EventService;
 import idservice.IDService;
+import kundenservice.CustomerService;
+import kundenservice.Kunde;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 
 public class Client {
     private final EventService eventService;
+    private final CustomerService kundeService;
     public Client(IDService idService) {
         this.eventService = new EventService(idService);
+        this.kundeService = new CustomerService(idService);
     }
 
     private long scanEventId(){
-        System.out.println("Event ID: ");
+        System.out.println("ID: ");
         Scanner eventIdScanner = new Scanner(System.in);
 
         try{
@@ -192,4 +197,90 @@ public class Client {
             }
         }
     }
+
+    private void scanNewKunde(){
+        System.out.println("neuen Kunden erstellen:\nName: ");
+        Scanner newKundenScanner = new Scanner(System.in);
+        String name = newKundenScanner.nextLine();
+        System.out.println("\nEmail: ");
+        String email = newKundenScanner.nextLine();
+        System.out.println("\nGeburtsdatum: ");
+        LocalDate geburtsdatum = LocalDate.parse(newKundenScanner.nextLine());
+
+        kundeService.createCustomer(name, email, geburtsdatum);
+        System.out.println(name + " wurde erstellt");
+        readUserChoice();
+
+    }
+
+    private void showKundenInformation(long id){
+        System.out.println(kundeService.getCustomerByID(id).toString());
+        readUserChoice();
+    }
+
+    private void changeKundenInformation(long id){
+        System.out.println("""
+                Was möchten Sie ändern?\s
+                Wählen Sie 1 für Nutzername,
+                Wählen Sie 2 für Email,
+                Wählen Sie 3 für Geburtsdatum,
+                Wählen Sie 0 um den Vorgang abzubrechen""");
+
+        switch (scanUserChoice()) {
+            case 1 -> {
+                System.out.println("Titel: ");
+                Scanner nameScanner = new Scanner(System.in);
+                kundeService.getCustomerByID(id).setNutzername(nameScanner.nextLine());
+                System.out.println("Name wurde erfolgreich geändert");
+                readUserChoice();
+            }
+            case 2 -> {
+                System.out.println("Email: ");
+                Scanner locationScanner = new Scanner(System.in);
+                kundeService.getCustomerByID(id).setEmail(locationScanner.nextLine());
+                System.out.println("Email wurde erfolgreich geändert");
+                readUserChoice();
+            }
+            case 3 -> {
+                System.out.println("Geburtsdatum: ");
+                Scanner geburtstagsscanner = new Scanner(System.in);
+                kundeService.getCustomerByID(id).setGeburtsdatum(LocalDate.parse(geburtstagsscanner.nextLine()));
+                System.out.println("Geburtsdatum wurde erfolgreich geändert");
+                readUserChoice();
+            }
+            case 0 -> readUserChoice();
+
+            default -> {
+                System.out.println("ungültige Eingabe, versuchen Sie es noch einmal\n");
+                changeEvent(id);
+            }
+        }
+    }
+
+    private void deleteKunde(long id){
+        kundeService.getCustomerByID(id);
+        System.out.println("Kunde wurde erfolgreich gelöscht");
+        readUserChoice();
+    }
+
+    private void showAllKundenInformation(){
+        System.out.println("Hier sind alle Kundeninformationen: \n");
+        ArrayList<Kunde> alleKunden = kundeService.getAllCustomer();
+        if(alleKunden.isEmpty()){ System.out.println("keine Kundeninformationen vorhanden"); }
+        for (Kunde alleKunde : alleKunden) {
+            System.out.println(alleKunde.toString() + "\n");
+        }
+        readUserChoice();
+    }
+
+    private void deleteAllKundenInformation(){
+        Collection<Kunde> alleKunden = kundeService.getAllCustomer();
+        for (Kunde alleKunde : alleKunden) {
+            eventService.deleteEvent(alleKunde.getId());
+        }
+        System.out.println("Alle Kundeninformationen wurden gelöscht");
+        readUserChoice();
+    }
+
+
 }

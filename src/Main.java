@@ -1,6 +1,3 @@
-import event.EventService;
-import java.time.LocalDate;
-import event.Event;
 import idservice.IDService;
 
 public class Main {
