@@ -18,7 +18,7 @@ public class Client {
     }
 
     private long scanEventId(){
-        System.out.println("ID: ");
+        System.out.println("Event ID: ");
         Scanner eventIdScanner = new Scanner(System.in);
 
         try{
@@ -29,6 +29,15 @@ public class Client {
             System.out.println(e.getMessage());
         }
         return 0;
+    }
+
+    private long scanCustomerId(){
+        System.out.println("Customer ID: ");
+        Scanner customerIdScanner = new Scanner(System.in);
+
+        long customerId = customerIdScanner.nextLong();
+        kundeService.getCustomerByID(customerId);
+        return customerId;
     }
 
     private int scanUserChoice(){
@@ -56,11 +65,15 @@ public class Client {
         System.out.println("""
                         Welchen Service benötigen Sie?\s
                         Wählen Sie 1 für den EventService,
-                        Wählen Sie 2 für den KundenService""");
+                        Wählen Sie 2 für den KundenService
+                        Wählen Sie 0 um den Vorgang abzubrechen""");
         Scanner serviceScanner = new Scanner(System.in);
         int service = Integer.parseInt(serviceScanner.nextLine());
 
         switch (service) {
+            case 0 -> {
+                System.out.println("Vorgang abgebrochen");
+            }
             case 2 -> readUserChoiceKundenService();
             case 1 -> {
 
@@ -72,10 +85,10 @@ public class Client {
                         Wählen Sie 4 um ein Event zu löschen,
                         Wählen Sie 5 um alle Events anzuzeigen,
                         Wählen Sie 6 um alle Events zu löschen,
-                        Wählen Sie 0 um den Vorgang abzubrechen""");
+                        Wählen Sie 0 um einen anderen Service auszuwählen""");
 
                 switch (scanUserChoice()) {
-                    case 0 -> System.out.println("Vorgang abgebrochen");
+                    case 0 -> readUserChoice();
                     case 1 -> scanNewEvent();
                     case 2 -> showEvent(scanEventId());
                     case 3 -> changeEvent(scanEventId());
@@ -172,6 +185,8 @@ public class Client {
         readUserChoice();
     }
 
+    //AB HIER KUNDENSERVICE CODES
+    //______________________________________________________________________
     private void readUserChoiceKundenService(){
         System.out.println("""
                         Was möchten Sie machen?\s
@@ -181,14 +196,14 @@ public class Client {
                         Wählen Sie 4 um einen Kunden aus dem System zu löschen,
                         Wählen Sie 5 um alle Kundeninformationen anzuzeigen,
                         Wählen Sie 6 um alle Kundeninformationen zu löschen,
-                        Wählen Sie 0 um den Vorgang abzubrechen""");
+                        Wählen Sie 0 um einen anderen Service auszuwählen""");
 
         switch (scanUserChoice()) {
-            case 0 -> System.out.println("Vorgang abgebrochen");
+            case 0 -> readUserChoice();
             case 1 -> scanNewKunde();
-            case 2 -> showKundenInformation(scanEventId());
-            case 3 -> changeKundenInformation(scanEventId());
-            case 4 -> deleteKunde(scanEventId());
+            case 2 -> showKundenInformation(scanCustomerId());
+            case 3 -> changeKundenInformation(scanCustomerId());
+            case 4 -> deleteKunde(scanCustomerId());
             case 5 -> showAllKundenInformation();
             case 6 -> deleteAllKundenInformation();
             default -> {
@@ -206,16 +221,31 @@ public class Client {
         String email = newKundenScanner.nextLine();
         System.out.println("\nGeburtsdatum: ");
         LocalDate geburtsdatum = LocalDate.parse(newKundenScanner.nextLine());
+        long c = kundeService.createCustomer(name, email, geburtsdatum);
 
-        kundeService.createCustomer(name, email, geburtsdatum);
-        System.out.println(name + " wurde erstellt");
+        if(c == 1){
+            System.out.println("falsches Email Format");
+            readUserChoice();
+        } else if(c == 2){
+            System.out.println("falsches Datum Format");
+            readUserChoice();
+        } else if(c == 3){
+            System.out.println("Kunde muss mind. 18 Jahre alt sein");
+            readUserChoice();
+        } else System.out.println(name + " wurde erstellt");
         readUserChoice();
 
     }
 
     private void showKundenInformation(long id){
-        System.out.println(kundeService.getCustomerByID(id).toString());
-        readUserChoice();
+        Kunde k = kundeService.getCustomerByID(id);
+        if(k != null){
+            System.out.println(k);
+            readUserChoice();
+        } else {
+            System.out.println("Es existiert kein Kunde mit der id " + id);
+            readUserChoice();
+        }
     }
 
     private void changeKundenInformation(long id){
@@ -258,7 +288,7 @@ public class Client {
     }
 
     private void deleteKunde(long id){
-        kundeService.getCustomerByID(id);
+        kundeService.deleteCustomer(id);
         System.out.println("Kunde wurde erfolgreich gelöscht");
         readUserChoice();
     }
@@ -274,10 +304,7 @@ public class Client {
     }
 
     private void deleteAllKundenInformation(){
-        Collection<Kunde> alleKunden = kundeService.getAllCustomer();
-        for (Kunde alleKunde : alleKunden) {
-            eventService.deleteEvent(alleKunde.getId());
-        }
+        kundeService.deleteAllCustomers();
         System.out.println("Alle Kundeninformationen wurden gelöscht");
         readUserChoice();
     }

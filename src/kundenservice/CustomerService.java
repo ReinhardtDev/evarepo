@@ -4,6 +4,8 @@ import idservice.IDService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomerService {
     private ArrayList<Kunde> customers;
@@ -14,23 +16,26 @@ public class CustomerService {
         this.customers = new ArrayList<>();
     }
 
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     public long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(username.isEmpty()) {
-            throw new IllegalArgumentException("Username is Invalid");
+            return 0;
         }
 
-
-
-        if(email.isEmpty()) {
-            throw new IllegalArgumentException("Email is Invalid");
+        if (!isValidEmail(email) || email.isEmpty()) {
+            return 1;
         }
 
         if(birthdate.isAfter(LocalDate.now().minusYears(18L))) {
-            throw new IllegalArgumentException("Muss mindestens 18 Jahre alt sein.");
+            return 3;
         }
-
-
 
         long customerID = idService.generateID();
         customers.add(new Kunde(customerID, username, email, birthdate));
@@ -43,8 +48,7 @@ public class CustomerService {
                 return kunde;
             }
         }
-
-        throw new IllegalArgumentException("Kunde mit ID " + id + "nicht gefunden.");
+        return null;
     }
 
     public void deleteCustomer(long id) {
