@@ -48,13 +48,16 @@ public class Client {
 
     }
     public void readUserChoice() {
-        System.out.println("Fortfahren? (y/n)");
-        Scanner fortfahrenScanner = new Scanner(System.in);
-        String fortfahren = fortfahrenScanner.nextLine();
+        System.out.println("""
+                        Welchen Service benötigen Sie?\s
+                        Wählen Sie 1 für den EventService,
+                        Wählen Sie 2 für den KundenService""");
+        Scanner serviceScanner = new Scanner(System.in);
+        int service = Integer.parseInt(serviceScanner.nextLine());
 
-        switch (fortfahren) {
-            case "n" -> System.out.println("Vorgang abgebrochen");
-            case "y" -> {
+        switch (service) {
+            case 2 -> readUserChoiceKundenService();
+            case 1 -> {
 
                 System.out.println("""
                         Was möchten Sie machen?\s
@@ -162,5 +165,31 @@ public class Client {
         }
         System.out.println("Alle Events wurden gelöscht");
         readUserChoice();
+    }
+
+    private void readUserChoiceKundenService(){
+        System.out.println("""
+                        Was möchten Sie machen?\s
+                        Wählen Sie 1 um einen neuen Kunden hinzuzufügen,
+                        Wählen Sie 2 um Kundeninformationen abzurufen,
+                        Wählen Sie 3 um Kundeninformationen zu ändern,
+                        Wählen Sie 4 um einen Kunden aus dem System zu löschen,
+                        Wählen Sie 5 um alle Kundeninformationen anzuzeigen,
+                        Wählen Sie 6 um alle Kundeninformationen zu löschen,
+                        Wählen Sie 0 um den Vorgang abzubrechen""");
+
+        switch (scanUserChoice()) {
+            case 0 -> System.out.println("Vorgang abgebrochen");
+            case 1 -> scanNewKunde();
+            case 2 -> showKundenInformation(scanEventId());
+            case 3 -> changeKundenInformation(scanEventId());
+            case 4 -> deleteKunde(scanEventId());
+            case 5 -> showAllKundenInformation();
+            case 6 -> deleteAllKundenInformation();
+            default -> {
+                System.out.println("ungültige Eingabe, bitte versuchen Sie es erneut\n");
+                readUserChoice();
+            }
+        }
     }
 }
