@@ -1,6 +1,9 @@
 package kundenservice;
 
+import ticketservice.Ticket;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Kunde {
 
@@ -8,12 +11,14 @@ public class Kunde {
     private String nutzername;
     private String email;
     private LocalDate geburtsdatum;
+    private ArrayList<Ticket> tickets;
 
     public Kunde(long id, String nutzername, String email, LocalDate geburtsdatum){
         this.id = id;
         this.nutzername = nutzername;
         this.email = email;
         this.geburtsdatum = geburtsdatum;
+        this.tickets = new ArrayList<>();
     }
 
     public long getId() {

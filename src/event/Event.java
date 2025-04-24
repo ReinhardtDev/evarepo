@@ -1,6 +1,9 @@
 package event;
 
+import ticketservice.Ticket;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Event {
 
@@ -10,6 +13,7 @@ public class Event {
         this.location = location;
         this.date = date;
         this.quota = quota;
+        this.tickets = new ArrayList<>();
     }
 
     public Event(String title, String place, LocalDate date, int quota) {
@@ -17,6 +21,7 @@ public class Event {
         this.location = place;
         this.date = date;
         this.quota = quota;
+        this.tickets = new ArrayList<>();
     }
 
     @Override
@@ -73,5 +78,7 @@ public class Event {
     private LocalDate date;
 
     private int quota;
+
+    private ArrayList<Ticket> tickets;
 
 }
