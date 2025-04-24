@@ -2,8 +2,10 @@ import event.Event;
 import event.EventService;
 import idservice.IDService;
 import kundenservice.CustomerService;
+import kundenservice.Kunde;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ public class Client {
     }
 
     private long scanEventId(){
-        System.out.println("Event ID: ");
+        System.out.println("ID: ");
         Scanner eventIdScanner = new Scanner(System.in);
 
         try{
@@ -263,18 +265,18 @@ public class Client {
 
     private void showAllKundenInformation(){
         System.out.println("Hier sind alle Kundeninformationen: \n");
-        Collection<Event> alleEvents = eventService.getAllEvents();
-        if(alleEvents.isEmpty()){ System.out.println("keine Kundeninformationen vorhanden"); }
-        for (Event alleEvent : alleEvents) {
-            System.out.println(alleEvent.toString() + "\n");
+        ArrayList<Kunde> alleKunden = kundeService.getAllCustomer();
+        if(alleKunden.isEmpty()){ System.out.println("keine Kundeninformationen vorhanden"); }
+        for (Kunde alleKunde : alleKunden) {
+            System.out.println(alleKunde.toString() + "\n");
         }
         readUserChoice();
     }
 
     private void deleteAllKundenInformation(){
-        Collection<Event> alleEvents = eventService.getAllEvents();
-        for (Event event : alleEvents) {
-            eventService.deleteEvent(event.getId());
+        Collection<Kunde> alleKunden = kundeService.getAllCustomer();
+        for (Kunde alleKunde : alleKunden) {
+            eventService.deleteEvent(alleKunde.getId());
         }
         System.out.println("Alle Kundeninformationen wurden gelöscht");
         readUserChoice();
