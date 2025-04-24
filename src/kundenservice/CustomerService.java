@@ -9,9 +9,9 @@ public class CustomerService {
     private ArrayList<Kunde> customers;
     private IDService idService;
 
-    public CustomerService(ArrayList<Kunde> customers, IDService idService) {
-        this.customers = customers;
+    public CustomerService(IDService idService) {
         this.idService = idService;
+        this.customers = new ArrayList<>();
     }
 
     public long createCustomer(String username, String email, LocalDate birthdate) {
