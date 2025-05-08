@@ -3,6 +3,8 @@ import event.EventService;
 import idservice.IDService;
 import kundenservice.CustomerService;
 import kundenservice.Kunde;
+import ticketservice.Ticket;
+import ticketservice.TicketService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.Scanner;
 public class Client {
     private final EventService eventService;
     private final CustomerService kundeService;
+    private final TicketService ticketService;
     public Client(IDService idService) {
         this.eventService = new EventService(idService);
         this.kundeService = new CustomerService(idService);
+        this.ticketService = new TicketService(idService);
     }
 
     private long scanEventId(){
@@ -66,6 +70,7 @@ public class Client {
                         Welchen Service benötigen Sie?\s
                         Wählen Sie 1 für den EventService,
                         Wählen Sie 2 für den KundenService
+                        Wählen Sie 3 für den TicketService
                         Wählen Sie 0 um den Vorgang abzubrechen""");
         Scanner serviceScanner = new Scanner(System.in);
         int service = Integer.parseInt(serviceScanner.nextLine());
@@ -75,6 +80,7 @@ public class Client {
                 System.out.println("Vorgang abgebrochen");
             }
             case 2 -> readUserChoiceKundenService();
+            case 3 -> readUserChoiceTicketService();
             case 1 -> {
 
                 System.out.println("""
@@ -309,5 +315,60 @@ public class Client {
         readUserChoice();
     }
 
+    //AB HIER TICKETSERVICE CODE
+    //___________________________________________________________________
+    private long scanTicketId(){
+        System.out.println("Ticket ID: ");
+        Scanner ticketIdScanner = new Scanner(System.in);
 
+        long customerId = ticketIdScanner.nextLong();
+        ticketService.getTicketById(customerId);
+        return customerId;
+    }
+
+    private void readUserChoiceTicketService(){
+        System.out.println("""
+                        Was möchten Sie machen?\s
+                        Wählen Sie 1 um ein neues Ticket zu kaufen,
+                        Wählen Sie 2 um ein Ticket zu stornieren,
+                        Wählen Sie 3 um ein Ticket anzuzeigen,
+                        Wählen Sie 0 um einen anderen Service auszuwählen
+                        """);
+
+        switch (scanUserChoice()) {
+            case 0 -> readUserChoice();
+            case 1 -> buyNewTicket();
+            case 2 -> deleteTicket(scanTicketId());
+            case 3 -> showTicket(scanTicketId());
+            default -> {
+                System.out.println("ungültige Eingabe, bitte versuchen Sie es erneut\n");
+                readUserChoice();
+            }
+        }
+    }
+
+    private void buyNewTicket(){
+            System.out.println("Ticket kaufen:\nEvent ID: ");
+            Scanner newTicketScanner = new Scanner(System.in);
+            long eventID = Long.parseLong(newTicketScanner.nextLine());
+            System.out.println("\nUser ID: ");
+            long userID = Long.parseLong(newTicketScanner.nextLine());
+            LocalDate now = LocalDate.now();
+            long c = ticketService.createTicket(now, userID, eventID);
+
+            System.out.println("Ticket " + c + "wurde gekauft");
+            readUserChoice();
+        }
+
+    private void deleteTicket(long id){
+        ticketService.deleteTicketById(id);
+        System.out.println("Ticket wurde erfolgreich storniert");
+        readUserChoice();
+    }
+
+    private void showTicket(long id){
+        Ticket t =  ticketService.getTicketById(id);
+        System.out.println(t);
+        readUserChoice();
+    }
 }
