@@ -23,13 +23,13 @@ public class TicketService {
         Event event = eventService.getEventById(eventId);
         int eventQuota = event.getQuota();
         if (eventQuota <= 0) {
-            return 0;
+            throw new RuntimeException("Event quota must be greater than zero");
         }
 
         Kunde kunde = customerService.getCustomerByID(customerId);
 
         if(kunde.isMaxTicketAmount(eventId)) {
-            return 1;
+            throw new RuntimeException("Customer has purchased max amount of tickets");
         }
 
         long ticketId = idService.generateID();
