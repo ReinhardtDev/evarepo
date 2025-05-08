@@ -23,13 +23,13 @@ public class TicketService {
         Event event = eventService.getEventById(eventId);
         int eventQuota = event.getQuota();
         if (eventQuota <= 0) {
-            return 0;
+            throw new RuntimeException("Event quota must be greater than zero");
         }
 
         Kunde kunde = customerService.getCustomerByID(customerId);
 
         if(kunde.isMaxTicketAmount(eventId)) {
-            return 1;
+            throw new RuntimeException("Customer has purchased max amount of tickets");
         }
 
         long ticketId = idService.generateID();
@@ -55,6 +55,36 @@ public class TicketService {
                 System.out.println("ticket deleted.");
             }
         }
+    }
+
+    public boolean isValidTicket(long ticketID) {
+        Ticket ticket = getTicketById(ticketID);
+        if(ticket == null) {
+            return false;
+        }
+
+        long customerID = ticket.getCustomerId();
+        Kunde customer = customerService.getCustomerByID(customerID);
+        if(customer == null) {
+            return false;
+        }
+
+        if(!customer.getTickets().contains(ticket)) {
+            return false;
+        }
+
+        Event event = eventService.getEventById(ticket.getEventId());
+
+        if (event == null) {
+            return false;
+        }
+
+        if(!event.getTickets().contains(ticket)) {
+            return false;
+        }
+
+        return true;
+
 
     }
 }

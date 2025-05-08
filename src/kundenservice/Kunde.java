@@ -63,6 +63,10 @@ public class Kunde {
         return count >= 5;
     }
 
+    public ArrayList<Ticket> getTickets() {
+        return tickets;
+    }
+
     @Override
     public String toString(){
         return "username='" + this.nutzername + '\'' + ",\n" +

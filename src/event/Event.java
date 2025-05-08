@@ -69,6 +69,10 @@ public class Event {
         this.quota = quota;
     }
 
+    public ArrayList<Ticket> getTickets() {
+        return tickets;
+    }
+
     private long id;
 
     private String title;
