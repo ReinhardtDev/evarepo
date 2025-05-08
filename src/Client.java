@@ -29,7 +29,7 @@ public class Client {
             eventService.getEventById(eventId);
             return eventId;
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid Event ID");
+            System.out.println(e.getMessage());
             readUserChoice();
         }
         return 0;
@@ -44,7 +44,7 @@ public class Client {
             kundeService.getCustomerByID(customerId);
             return customerId;
         } catch (IllegalArgumentException e){
-            System.out.println("Invalid Customer ID");
+            System.out.println(e.getMessage());
             readUserChoice();
         }
         return 0;
@@ -55,26 +55,32 @@ public class Client {
         try {
             return Integer.parseInt(userChoiceScanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("ungültige Eingabe");
+            System.out.println("Ungültige Eingabe");
             readUserChoice();
         }
         return 0;
     }
 
     private void scanNewEvent(){
-        System.out.println("neues Event erstellen:\nTitel: ");
-        Scanner newEventScanner = new Scanner(System.in);
-        String title = newEventScanner.nextLine();
-        System.out.println("\nLocation: ");
-        String location = newEventScanner.nextLine();
-        System.out.println("\nDatum: ");
-        LocalDate date = LocalDate.parse(newEventScanner.nextLine());
-        System.out.println("\nQuota: ");
-        int quota = Integer.parseInt(newEventScanner.nextLine());
+        try{
+            System.out.println("neues Event erstellen:\nTitel: ");
+            Scanner newEventScanner = new Scanner(System.in);
+            String title = newEventScanner.nextLine();
+            System.out.println("\nLocation: ");
+            String location = newEventScanner.nextLine();
+            System.out.println("\nDatum: ");
+            LocalDate date = LocalDate.parse(newEventScanner.nextLine());
+            System.out.println("\nQuota: ");
+            int quota = Integer.parseInt(newEventScanner.nextLine());
 
-        long id = eventService.createEvent(title, location, date, quota);
-        System.out.println("Event " + title + " " + id + " wurde erstellt");
-        readUserChoice();
+            long id = eventService.createEvent(title, location, date, quota);
+            System.out.println("Event " + title + " " + id + " wurde erstellt");
+            readUserChoice();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            readUserChoice();
+        }
+
 
     }
     public void readUserChoice() {
@@ -89,6 +95,7 @@ public class Client {
         switch (service) {
             case 0 -> {
                 System.out.println("Vorgang abgebrochen");
+                System.exit(0);
             }
             case 2 -> readUserChoiceKundenService();
             case 3 -> readUserChoiceTicketService();
@@ -140,42 +147,47 @@ public class Client {
                 Wählen Sie 4 für Quota,
                 Wählen Sie 0 um einen anderen Vorgang auszuwählen""");
 
-        switch (scanUserChoice()) {
-            case 1 -> {
-                System.out.println("Titel: ");
-                Scanner titleScanner = new Scanner(System.in);
-                eventService.getEventById(id).setTitle(titleScanner.nextLine());
-                System.out.println("Titel wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 2 -> {
-                System.out.println("Location: ");
-                Scanner locationScanner = new Scanner(System.in);
-                eventService.getEventById(id).setLocation(locationScanner.nextLine());
-                System.out.println("Location wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 3 -> {
-                System.out.println("Datum: ");
-                Scanner dateScanner = new Scanner(System.in);
-                eventService.getEventById(id).setDate(LocalDate.parse(dateScanner.nextLine()));
-                System.out.println("Datum wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 4 -> {
-                System.out.println("Quota: ");
-                Scanner quotaScanner = new Scanner(System.in);
-                eventService.getEventById(id).setQuota(Integer.parseInt(quotaScanner.nextLine()));
-                System.out.println("Quota wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 0 -> readUserChoice();
+        try{
+            switch (scanUserChoice()) {
+                case 1 -> {
+                    System.out.println("Titel: ");
+                    Scanner titleScanner = new Scanner(System.in);
+                    eventService.getEventById(id).setTitle(titleScanner.nextLine());
+                    System.out.println("Titel wurde erfolgreich geändert");
+                    readUserChoice();
+                }
+                case 2 -> {
+                    System.out.println("Location: ");
+                    Scanner locationScanner = new Scanner(System.in);
+                    eventService.getEventById(id).setLocation(locationScanner.nextLine());
+                    System.out.println("Location wurde erfolgreich geändert");
+                    readUserChoice();
+                }
+                case 3 -> {
+                    System.out.println("Datum: ");
+                    Scanner dateScanner = new Scanner(System.in);
+                    eventService.getEventById(id).setDate(LocalDate.parse(dateScanner.nextLine()));
+                    System.out.println("Datum wurde erfolgreich geändert");
+                    readUserChoice();
+                }
+                case 4 -> {
+                    System.out.println("Quota: ");
+                    Scanner quotaScanner = new Scanner(System.in);
+                    eventService.getEventById(id).setQuota(Integer.parseInt(quotaScanner.nextLine()));
+                    System.out.println("Quota wurde erfolgreich geändert");
+                    readUserChoice();
+                }
+                case 0 -> readUserChoice();
 
-            default -> {
-                System.out.println("ungültige Eingabe, versuchen Sie es noch einmal\n");
-                changeEvent(id);
+                default -> {
+                    System.out.println("ungültige Eingabe, versuchen Sie es noch einmal\n");
+                    changeEvent(id);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Event mit ID " + id + " nicht gefunden.");
         }
+
     }
 
     private void deleteEvent(long id){
@@ -187,7 +199,11 @@ public class Client {
     private void showAllEvents(){
         System.out.println("Hier sind alle Events: \n");
         Collection<Event> alleEvents = eventService.getAllEvents();
-        if(alleEvents.isEmpty()){ System.out.println("keine Events vorhanden"); }
+        if(alleEvents.isEmpty()) {
+            System.out.println("keine Events vorhanden");
+            readUserChoice();
+        }
+
         for (Event alleEvent : alleEvents) {
             System.out.println(alleEvent.toString() + "\n");
         }
@@ -225,34 +241,29 @@ public class Client {
             case 5 -> showAllKundenInformation();
             case 6 -> deleteAllKundenInformation();
             default -> {
-                System.out.println("ungültige Eingabe, bitte versuchen Sie es erneut\n");
+                System.out.println("Invalid input, try again\n");
                 readUserChoice();
             }
         }
     }
 
     private void scanNewKunde(){
-        System.out.println("neuen Kunden erstellen:\nName: ");
-        Scanner newKundenScanner = new Scanner(System.in);
-        String name = newKundenScanner.nextLine();
-        System.out.println("\nEmail: ");
-        String email = newKundenScanner.nextLine();
-        System.out.println("\nGeburtsdatum: ");
-        LocalDate geburtsdatum = LocalDate.parse(newKundenScanner.nextLine());
-        long c = kundeService.createCustomer(name, email, geburtsdatum);
+        try {
+            System.out.println("Create new customer:\nName: ");
+            Scanner newKundenScanner = new Scanner(System.in);
+            String name = newKundenScanner.nextLine();
+            System.out.println("\nEmail: ");
+            String email = newKundenScanner.nextLine();
+            System.out.println("\nBirthdate: ");
+            LocalDate geburtsdatum = LocalDate.parse(newKundenScanner.nextLine());
 
-        if(c == 1){
-            System.out.println("falsches Email Format");
+            long c = kundeService.createCustomer(name, email, geburtsdatum);
+            System.out.println("Customer with ID " + c + " successfully created\n");
             readUserChoice();
-        } else if(c == 2){
-            System.out.println("falsches Datum Format");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             readUserChoice();
-        } else if(c == 3){
-            System.out.println("Kunde muss mind. 18 Jahre alt sein");
-            readUserChoice();
-        } else System.out.println("Kunde mit der id " + c + " wurde erstellt");
-        readUserChoice();
-
+        }
     }
 
     private void showKundenInformation(long id){
@@ -261,7 +272,7 @@ public class Client {
             System.out.println(k);
             readUserChoice();
         } else {
-            System.out.println("Es existiert kein Kunde mit der id " + id);
+            System.out.println("No customer with ID " + id + " found");
             readUserChoice();
         }
     }
@@ -274,47 +285,53 @@ public class Client {
                 Wählen Sie 3 für Geburtsdatum,
                 Wählen Sie 0 um den Vorgang abzubrechen""");
 
-        switch (scanUserChoice()) {
-            case 1 -> {
-                System.out.println("Titel: ");
-                Scanner nameScanner = new Scanner(System.in);
-                kundeService.getCustomerByID(id).setNutzername(nameScanner.nextLine());
-                System.out.println("Name wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 2 -> {
-                System.out.println("Email: ");
-                Scanner locationScanner = new Scanner(System.in);
-                kundeService.getCustomerByID(id).setEmail(locationScanner.nextLine());
-                System.out.println("Email wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 3 -> {
-                System.out.println("Geburtsdatum: ");
-                Scanner geburtstagsscanner = new Scanner(System.in);
-                kundeService.getCustomerByID(id).setGeburtsdatum(LocalDate.parse(geburtstagsscanner.nextLine()));
-                System.out.println("Geburtsdatum wurde erfolgreich geändert");
-                readUserChoice();
-            }
-            case 0 -> readUserChoice();
+        try{
+            switch (scanUserChoice()) {
+                case 1 -> {
+                    System.out.println("Title: ");
+                    Scanner nameScanner = new Scanner(System.in);
+                    kundeService.getCustomerByID(id).setNutzername(nameScanner.nextLine());
+                    System.out.println("Name successfully changed");
+                    readUserChoice();
+                }
+                case 2 -> {
+                    System.out.println("Email: ");
+                    Scanner locationScanner = new Scanner(System.in);
+                    kundeService.getCustomerByID(id).setEmail(locationScanner.nextLine());
+                    System.out.println("Email successfully changed");
+                    readUserChoice();
+                }
+                case 3 -> {
+                    System.out.println("Birthdate: ");
+                    Scanner geburtstagsscanner = new Scanner(System.in);
+                    kundeService.getCustomerByID(id).setGeburtsdatum(LocalDate.parse(geburtstagsscanner.nextLine()));
+                    System.out.println("Birthdate successfully changed");
+                    readUserChoice();
+                }
+                case 0 -> readUserChoice();
 
-            default -> {
-                System.out.println("ungültige Eingabe, versuchen Sie es noch einmal\n");
-                changeEvent(id);
+                default -> {
+                    System.out.println("Invalid input, try again\n");
+                    changeKundenInformation(id);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Customer with  " + id + " not found");
+            readUserChoice();
         }
+
     }
 
     private void deleteKunde(long id){
         kundeService.deleteCustomer(id);
-        System.out.println("Kunde wurde erfolgreich gelöscht");
+        System.out.println("Customer successfully deleted");
         readUserChoice();
     }
 
     private void showAllKundenInformation(){
-        System.out.println("Hier sind alle Kundeninformationen: \n");
+        System.out.println("Customer data: \n");
         ArrayList<Kunde> alleKunden = kundeService.getAllCustomer();
-        if(alleKunden.isEmpty()){ System.out.println("keine Kundeninformationen vorhanden"); }
+        if(alleKunden.isEmpty()){ System.out.println("No customers available"); }
         for (Kunde alleKunde : alleKunden) {
             System.out.println(alleKunde.toString() + "\n");
         }
@@ -323,7 +340,7 @@ public class Client {
 
     private void deleteAllKundenInformation(){
         kundeService.deleteAllCustomers();
-        System.out.println("Alle Kundeninformationen wurden gelöscht");
+        System.out.println("Successfully deleted all customers");
         readUserChoice();
     }
 
@@ -333,9 +350,15 @@ public class Client {
         System.out.println("Ticket ID: ");
         Scanner ticketIdScanner = new Scanner(System.in);
 
-        long customerId = ticketIdScanner.nextLong();
-        ticketService.getTicketById(customerId);
-        return customerId;
+        try{
+            long customerId = ticketIdScanner.nextLong();
+            ticketService.getTicketById(customerId);
+            return customerId;
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            readUserChoice();
+        }
+        return 0;
     }
 
     private void readUserChoiceTicketService(){
@@ -355,7 +378,7 @@ public class Client {
             case 3 -> showTicket(scanTicketId());
             case 4 -> checkTicketValid(scanTicketId());
             default -> {
-                System.out.println("ungültige Eingabe, bitte versuchen Sie es erneut\n");
+                System.out.println("Invalid input, try again. \n");
                 readUserChoice();
             }
         }
@@ -364,34 +387,52 @@ public class Client {
     private void buyNewTicket(){
             System.out.println("Ticket kaufen:\nEvent ID: ");
             Scanner newTicketScanner = new Scanner(System.in);
-            long eventID = Long.parseLong(newTicketScanner.nextLine());
-            System.out.println("\nUser ID: ");
-            long userID = Long.parseLong(newTicketScanner.nextLine());
-            LocalDate now = LocalDate.now();
-            long c = ticketService.createTicket(now, userID, eventID);
 
-            System.out.println("Ticket " + c + " wurde gekauft");
-            readUserChoice();
+            try{
+                long eventID = Long.parseLong(newTicketScanner.nextLine());
+                System.out.println("\nUser ID: ");
+                long userID = Long.parseLong(newTicketScanner.nextLine());
+                LocalDate now = LocalDate.now();
+                long c = ticketService.createTicket(now, userID, eventID);
+
+                System.out.println("Ticket with ID " + c  + " succesfully bought.");
+                readUserChoice();
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+                readUserChoice();
+            }
+
         }
 
     private void deleteTicket(long id){
-        ticketService.deleteTicketById(id);
-        System.out.println("Ticket wurde erfolgreich storniert");
-        readUserChoice();
+        try{
+            ticketService.deleteTicketById(id);
+            System.out.println("Ticket successfully cancelled");
+            readUserChoice();
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            readUserChoice();
+        }
     }
 
     private void showTicket(long id){
-        Ticket t =  ticketService.getTicketById(id);
-        System.out.println(t);
-        readUserChoice();
+        try{
+            Ticket t =  ticketService.getTicketById(id);
+            System.out.println(t);
+            readUserChoice();
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            readUserChoice();
+        }
     }
 
     private void checkTicketValid(long id){
         boolean isValidTicket = ticketService.isValidTicket(id);
         if(isValidTicket){
-            System.out.println("Ticket " + id + " ist valide.");
+            System.out.println("Ticket " + id + " is valid.");
+        } else {
+            System.out.println("Ticket " + id + " is invalid.");
         }
-
         readUserChoice();
     }
 }

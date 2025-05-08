@@ -26,15 +26,15 @@ public class CustomerService {
     public long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(username.isEmpty()) {
-            return 0;
+            throw new IllegalArgumentException("Username cannot be empty");
         }
 
         if (!isValidEmail(email) || email.isEmpty()) {
-            return 1;
+            throw new IllegalArgumentException("Invalid email");
         }
 
         if(birthdate.isAfter(LocalDate.now().minusYears(18L))) {
-            return 3;
+            throw new IllegalArgumentException("Invalid birthdate");
         }
 
         long customerID = idService.generateID();
