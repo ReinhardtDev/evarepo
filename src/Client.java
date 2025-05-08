@@ -24,13 +24,13 @@ public class Client {
     private long scanEventId(){
         System.out.println("Event ID: ");
         Scanner eventIdScanner = new Scanner(System.in);
-
-        try{
+        try {
             long eventId = eventIdScanner.nextLong();
             eventService.getEventById(eventId);
             return eventId;
-        } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid Event ID");
+            readUserChoice();
         }
         return 0;
     }
@@ -39,9 +39,15 @@ public class Client {
         System.out.println("Customer ID: ");
         Scanner customerIdScanner = new Scanner(System.in);
 
-        long customerId = customerIdScanner.nextLong();
-        kundeService.getCustomerByID(customerId);
-        return customerId;
+        try{
+            long customerId = customerIdScanner.nextLong();
+            kundeService.getCustomerByID(customerId);
+            return customerId;
+        } catch (IllegalArgumentException e){
+            System.out.println("Invalid Customer ID");
+            readUserChoice();
+        }
+        return 0;
     }
 
     private int scanUserChoice(){
@@ -115,8 +121,9 @@ public class Client {
     }
 
     private void showEvent(long id){
-        System.out.println(eventService.getEventById(id).toString());
-        readUserChoice();
+
+            System.out.println(eventService.getEventById(id).toString());
+            readUserChoice();
     }
 
     private void changeEvent(long id){
