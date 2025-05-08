@@ -387,7 +387,11 @@ public class Client {
     }
 
     private void checkTicketValid(long id){
-        ticketService.isValidTicket(id);
+        boolean isValidTicket = ticketService.isValidTicket(id);
+        if(isValidTicket){
+            System.out.println("Ticket " + id + " ist valide.");
+        }
+
         readUserChoice();
     }
 }
