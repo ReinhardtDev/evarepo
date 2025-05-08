@@ -8,7 +8,7 @@ import idservice.IDService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TicketService {
+public class TicketService implements TicketServiceInterface {
     private EventService eventService;
     private CustomerService customerService;
     private ArrayList<Ticket> tickets;
@@ -21,6 +21,7 @@ public class TicketService {
         this.tickets = new ArrayList<Ticket>();
     }
 
+    @Override
     public long createTicket(LocalDate purchaseDate, long customerId, long eventId) {
         Event event = eventService.getEventById(eventId);
         int eventQuota = event.getQuota();
@@ -40,6 +41,7 @@ public class TicketService {
         return ticketId;
     }
 
+    @Override
     public Ticket getTicketById(long id){
         for(Ticket ticket: tickets) {
             if(ticket.getId() == id) {
@@ -49,6 +51,7 @@ public class TicketService {
         return null;
     }
 
+    @Override
     public void deleteTicketById(long id){
         for(Ticket ticket: tickets) {
             if(ticket.getId() == id) {
@@ -59,6 +62,7 @@ public class TicketService {
         }
     }
 
+    @Override
     public boolean isValidTicket(long ticketID) {
         Ticket ticket = getTicketById(ticketID);
         if(ticket == null) {
