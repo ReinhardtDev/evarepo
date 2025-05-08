@@ -5,7 +5,7 @@ import idservice.IDService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CustomerService {
+public class CustomerService implements CustomerServiceInterface {
     private ArrayList<Kunde> customers;
     private IDService idService;
 
@@ -23,6 +23,7 @@ public class CustomerService {
         return false;
     }
 
+    @Override
     public long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(username.isEmpty()) {
@@ -42,6 +43,7 @@ public class CustomerService {
         return customerID;
     }
 
+    @Override
     public Kunde getCustomerByID(long id) {
         for(Kunde kunde: customers) {
             if(kunde.getId() == id) {
@@ -51,6 +53,7 @@ public class CustomerService {
         return null;
     }
 
+    @Override
     public void deleteCustomer(long id) {
         for(Kunde kunde: customers) {
             if(kunde.getId() == id) {
@@ -61,10 +64,12 @@ public class CustomerService {
         }
     }
 
+    @Override
     public ArrayList<Kunde> getAllCustomer() {
         return customers;
     }
 
+    @Override
     public void deleteAllCustomers() {
         for(Kunde kunde: customers) {
             idService.deleteID(kunde.getId());
