@@ -18,7 +18,7 @@ public class Client {
     public Client(IDService idService) {
         this.eventService = new EventService(idService);
         this.kundeService = new CustomerService(idService);
-        this.ticketService = new TicketService(idService);
+        this.ticketService = new TicketService(idService, this.eventService, this.kundeService);
     }
 
     private long scanEventId(){

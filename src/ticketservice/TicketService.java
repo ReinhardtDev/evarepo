@@ -14,8 +14,10 @@ public class TicketService {
     private ArrayList<Ticket> tickets;
     private IDService idService;
 
-    public TicketService(IDService idservice) {
+    public TicketService(IDService idservice, EventService eventService, CustomerService customerService) {
         this.idService = idservice;
+        this.eventService = eventService;
+        this.customerService = customerService;
         this.tickets = new ArrayList<Ticket>();
     }
 
