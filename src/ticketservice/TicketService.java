@@ -81,12 +81,7 @@ public class TicketService {
             return false;
         }
 
-        if(!event.getTickets().contains(ticket)) {
-            return false;
-        }
-
-        return true;
-
+        return event.getTickets().contains(ticket);
 
     }
 }

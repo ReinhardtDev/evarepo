@@ -52,7 +52,13 @@ public class Client {
 
     private int scanUserChoice(){
         Scanner userChoiceScanner = new Scanner(System.in);
-        return Integer.parseInt(userChoiceScanner.nextLine());
+        try {
+            return Integer.parseInt(userChoiceScanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("ungültige Eingabe");
+            readUserChoice();
+        }
+        return 0;
     }
 
     private void scanNewEvent(){
@@ -66,8 +72,8 @@ public class Client {
         System.out.println("\nQuota: ");
         int quota = Integer.parseInt(newEventScanner.nextLine());
 
-        eventService.createEvent(title, location, date, quota);
-        System.out.println(title + " wurde erstellt");
+        long id = eventService.createEvent(title, location, date, quota);
+        System.out.println("Event " + title + " " + id + " wurde erstellt");
         readUserChoice();
 
     }
@@ -78,8 +84,7 @@ public class Client {
                         Wählen Sie 2 für den KundenService
                         Wählen Sie 3 für den TicketService
                         Wählen Sie 0 um den Vorgang abzubrechen""");
-        Scanner serviceScanner = new Scanner(System.in);
-        int service = Integer.parseInt(serviceScanner.nextLine());
+        int service = scanUserChoice();
 
         switch (service) {
             case 0 -> {
@@ -245,7 +250,7 @@ public class Client {
         } else if(c == 3){
             System.out.println("Kunde muss mind. 18 Jahre alt sein");
             readUserChoice();
-        } else System.out.println(name + " wurde erstellt");
+        } else System.out.println("Kunde mit der id " + c + " wurde erstellt");
         readUserChoice();
 
     }
@@ -339,6 +344,7 @@ public class Client {
                         Wählen Sie 1 um ein neues Ticket zu kaufen,
                         Wählen Sie 2 um ein Ticket zu stornieren,
                         Wählen Sie 3 um ein Ticket anzuzeigen,
+                        Wählen Sie 4 um die Gültigkeit eines Tickets zu überprüfen,
                         Wählen Sie 0 um einen anderen Service auszuwählen
                         """);
 
@@ -347,6 +353,7 @@ public class Client {
             case 1 -> buyNewTicket();
             case 2 -> deleteTicket(scanTicketId());
             case 3 -> showTicket(scanTicketId());
+            case 4 -> checkTicketValid(scanTicketId());
             default -> {
                 System.out.println("ungültige Eingabe, bitte versuchen Sie es erneut\n");
                 readUserChoice();
@@ -363,7 +370,7 @@ public class Client {
             LocalDate now = LocalDate.now();
             long c = ticketService.createTicket(now, userID, eventID);
 
-            System.out.println("Ticket " + c + "wurde gekauft");
+            System.out.println("Ticket " + c + " wurde gekauft");
             readUserChoice();
         }
 
@@ -376,6 +383,11 @@ public class Client {
     private void showTicket(long id){
         Ticket t =  ticketService.getTicketById(id);
         System.out.println(t);
+        readUserChoice();
+    }
+
+    private void checkTicketValid(long id){
+        ticketService.isValidTicket(id);
         readUserChoice();
     }
 }
