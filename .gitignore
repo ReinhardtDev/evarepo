@@ -1,3 +1,4 @@
-out/
+out/production/evarepo
+.idea/
 !**/src/main/**/out/
-!*+/src/test/**/out/
+!**/src/test/**/out/
