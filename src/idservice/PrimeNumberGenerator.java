@@ -16,31 +16,34 @@ public class PrimeNumberGenerator {
 
     public long generate() {
         long i;
-        long y;
-        boolean isprime;
+        boolean prime = false;
         for (i = lower; i <= upper; i++) {
-            if (i == 1 || i == 0)
-                continue;
-
-            // Using flag variable to check
-            // if x is prime or not
-            isprime = true;
-
-            for (y = 2; y <= i / 2; ++y) {
-                if (i % y == 0) {
-                    isprime = false;
-                    break;
-                }
-            }
-
-            // If flag is 1 then x is prime but
-            // if flag is 0 then x is not prime
-            if (isprime) {
-                primzahlen.add(i);
-                this.lower = i + 1;
+            prime = isPrime(i);
+            if(prime) {
                 return i;
             }
         }
         return -1;
     }
+
+    //https://www.geeksforgeeks.org/java-prime-number-program/
+    private boolean isPrime(long n)  {
+        // Corner case
+        if (n <= 1)
+            return false;
+        // For n=2 or n=3 it will check
+        if (n == 2 || n == 3)
+            return true;
+        // For multiple of 2 or 3 This will check
+        if (n % 2 == 0 || n % 3 == 0)
+            return false;
+        // It will check all the others condition
+        for (long i = 5; i <= Math.sqrt(n); i = i + 6)
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+
+        return true;
+    }
+
+
 }
