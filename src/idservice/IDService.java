@@ -13,7 +13,10 @@ public class IDService {
     }
 
     public long generateID() {
+        //double starTime = System.nanoTime();
         long id = primeNumberGenerator.generate();
+        //double endTime = System.nanoTime();
+        //System.out.println("Primality check exec time: "  + (endTime - starTime) / 1000000 + "ms");
         if(id != -1) {
             idStore.add(id);
             return id;

@@ -16,9 +16,8 @@ public class PrimeNumberGenerator {
 
     public long generate() {
         long i;
-        boolean prime = false;
         for (i = lower; i <= upper; i++) {
-            prime = isPrime(i);
+            boolean prime = isPrime(i);
             if(prime) {
                 return i;
             }
