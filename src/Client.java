@@ -1,10 +1,13 @@
 import event.Event;
 import event.EventService;
+import event.EventServiceInterface;
 import idservice.IDService;
 import kundenservice.CustomerService;
+import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import ticketservice.Ticket;
 import ticketservice.TicketService;
+import ticketservice.TicketServiceInterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,13 +15,14 @@ import java.util.Collection;
 import java.util.Scanner;
 
 public class Client {
-    private final EventService eventService;
-    private final CustomerService kundeService;
-    private final TicketService ticketService;
-    public Client(IDService idService) {
-        this.eventService = new EventService(idService);
-        this.kundeService = new CustomerService(idService);
-        this.ticketService = new TicketService(idService, this.eventService, this.kundeService);
+    private final EventServiceInterface eventService;
+    private final CustomerServiceInterface kundeService;
+    private final TicketServiceInterface ticketService;
+
+    public Client(TicketShop ticketShop) {
+        this.eventService = ticketShop.getEventServiceInterface();
+        this.kundeService = ticketShop.getCustomerServiceInterface();
+        this.ticketService = ticketShop.getTicketServiceInterface();
     }
 
     private long scanEventId(){

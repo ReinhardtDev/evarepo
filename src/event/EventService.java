@@ -4,7 +4,6 @@ import idservice.IDService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class EventService implements EventServiceInterface {
 
@@ -12,6 +11,14 @@ public class EventService implements EventServiceInterface {
         this.events = new ArrayList<>();
         this.idService = idService;
     }
+
+    public static EventService getInstance(IDService idService) {
+        if (INSTANCE == null) {
+            INSTANCE = new EventService(idService);
+        }
+        return INSTANCE;
+    }
+
 
     @Override
     public long createEvent(String title, String location, LocalDate date, int quota) {
@@ -53,9 +60,12 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public Collection<Event> getAllEvents() {
-        return (Collection<Event>) events.clone();
+    public ArrayList<Event> getAllEvents() {
+        return events;
     }
+
+
+    private static EventService INSTANCE;
 
     private ArrayList<Event> events;
 

@@ -1,6 +1,7 @@
 package kundenservice;
 
 import idservice.IDService;
+import idservice.IDServiceParallel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,10 +9,18 @@ import java.util.ArrayList;
 public class CustomerService implements CustomerServiceInterface {
     private ArrayList<Kunde> customers;
     private IDService idService;
+    private static CustomerService INSTANCE;
 
     public CustomerService(IDService idService) {
         this.idService = idService;
         this.customers = new ArrayList<>();
+    }
+
+    public static CustomerService getInstance(IDService idService) {
+        if (INSTANCE == null) {
+            INSTANCE = new CustomerService(idService);
+        }
+        return INSTANCE;
     }
 
     public boolean isValidEmail(String email) {

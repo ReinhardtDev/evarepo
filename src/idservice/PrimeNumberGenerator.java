@@ -19,6 +19,7 @@ public class PrimeNumberGenerator {
         for (i = lower; i <= upper; i++) {
             boolean prime = isPrime(i);
             if(prime) {
+                lower = i + 1;
                 return i;
             }
         }
@@ -43,6 +44,4 @@ public class PrimeNumberGenerator {
 
         return true;
     }
-
-
 }

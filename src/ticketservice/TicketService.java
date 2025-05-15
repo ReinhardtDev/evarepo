@@ -1,6 +1,8 @@
 package ticketservice;
 import event.Event;
+import event.EventServiceInterface;
 import kundenservice.CustomerService;
+import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import event.EventService;
 import idservice.IDService;
@@ -9,17 +11,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TicketService implements TicketServiceInterface {
-    private EventService eventService;
-    private CustomerService customerService;
+    private final EventServiceInterface eventService;
+    private final CustomerServiceInterface customerService;
     private ArrayList<Ticket> tickets;
-    private IDService idService;
+    private final IDService idService;
+    private static TicketService INSTANCE;
 
-    public TicketService(IDService idservice, EventService eventService, CustomerService customerService) {
-        this.idService = idservice;
+    public TicketService(IDService idService, EventServiceInterface eventService, CustomerServiceInterface customerService) {
+        this.idService = idService;
         this.eventService = eventService;
         this.customerService = customerService;
-        this.tickets = new ArrayList<Ticket>();
+        this.tickets = new ArrayList<>();
     }
+
+    public static TicketService getInstance(IDService idservice, EventServiceInterface eventService, CustomerServiceInterface customerService) {
+        if (INSTANCE == null) {
+            INSTANCE = new TicketService(idservice, eventService, customerService);
+        }
+        return INSTANCE;
+    }
+
 
     @Override
     public long createTicket(LocalDate purchaseDate, long customerId, long eventId) {

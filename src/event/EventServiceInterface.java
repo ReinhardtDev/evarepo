@@ -1,6 +1,7 @@
 package event;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public interface EventServiceInterface {
@@ -10,5 +11,7 @@ public interface EventServiceInterface {
 
     Event getEventById(long id);
 
-    Collection<Event> getAllEvents();
+    ArrayList<Event> getAllEvents();
+
+    void reduceQuota(Event event);
 }
