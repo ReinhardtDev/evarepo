@@ -2,7 +2,7 @@ package idservice;
 
 import java.util.ArrayList;
 
-public class PrimeNumberGenerator {
+public class PrimeNumberGenerator implements Runnable {
 
     long lower;
     long upper;
@@ -43,5 +43,10 @@ public class PrimeNumberGenerator {
                 return false;
 
         return true;
+    }
+
+    @Override
+    public void run() {
+        long id = generate();
     }
 }

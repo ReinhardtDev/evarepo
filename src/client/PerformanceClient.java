@@ -1,11 +1,9 @@
+package client;
+
 import event.Event;
-import event.EventService;
 import event.EventServiceInterface;
-import idservice.IDService;
-import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
-import ticketservice.TicketService;
 import ticketservice.TicketServiceInterface;
 
 import java.time.LocalDate;
