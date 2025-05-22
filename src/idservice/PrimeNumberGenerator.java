@@ -2,7 +2,7 @@ package idservice;
 
 import java.util.ArrayList;
 
-public class PrimeNumberGenerator implements Runnable {
+public class PrimeNumberGenerator {
 
     long lower;
     long upper;
@@ -26,7 +26,6 @@ public class PrimeNumberGenerator implements Runnable {
         return -1;
     }
 
-    //https://www.geeksforgeeks.org/java-prime-number-program/
     private boolean isPrime(long n)  {
         // Corner case
         if (n <= 1)
@@ -45,8 +44,4 @@ public class PrimeNumberGenerator implements Runnable {
         return true;
     }
 
-    @Override
-    public void run() {
-        long id = generate();
-    }
 }

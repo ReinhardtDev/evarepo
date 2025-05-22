@@ -7,6 +7,7 @@ import kundenservice.Kunde;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventService implements EventServiceInterface {
 
@@ -34,8 +35,7 @@ public class EventService implements EventServiceInterface {
         }
 
 
-        ArrayList<Long> ids = idService.generateID(1);
-        long id = ids.get(0);
+        long id = idService.generateNext();
         events.add(new Event(id, title, location, date, quota));
         return id;
 

@@ -11,6 +11,7 @@ import idservice.IDService;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TicketService implements TicketServiceInterface {
     private final EventServiceInterface eventService;
@@ -48,8 +49,7 @@ public class TicketService implements TicketServiceInterface {
             throw new RuntimeException("Customer has purchased max amount of tickets");
         }
 
-        ArrayList<Long> ids = idService.generateID(1);
-        long id = ids.get(0);
+        long id = idService.generateNext();
         tickets.add(new Ticket(id, purchaseDate, customerId, eventId));
         eventService.reduceQuota(event);
         return id;

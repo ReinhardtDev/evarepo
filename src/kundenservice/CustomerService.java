@@ -4,6 +4,7 @@ import idservice.IDServiceParallel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerService implements CustomerServiceInterface {
     private ArrayList<Kunde> customers;
@@ -46,8 +47,7 @@ public class CustomerService implements CustomerServiceInterface {
             throw new IllegalArgumentException("Invalid birthdate");
         }
 
-        ArrayList<Long> ids = idService.generateID(1);
-        long id = ids.get(0);
+        long id = idService.generateNext();
         customers.add(new Kunde(id, username, email, birthdate));
         return id;
     }
