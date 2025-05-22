@@ -1,19 +1,23 @@
 package kundenservice;
 
+import idservice.IDService;
 import idservice.IDServiceParallel;
+import logservice.LogService;
+import logservice.LogServiceInterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerService implements CustomerServiceInterface {
     private ArrayList<Kunde> customers;
     private IDServiceParallel idService;
     private static CustomerService INSTANCE;
+    private LogServiceInterface logService;
 
     public CustomerService(IDServiceParallel idService) {
         this.idService = idService;
         this.customers = new ArrayList<>();
+        this.logService = LogService.getInstance();
     }
 
     public static CustomerService getInstance(IDServiceParallel idService) {
@@ -47,9 +51,11 @@ public class CustomerService implements CustomerServiceInterface {
             throw new IllegalArgumentException("Invalid birthdate");
         }
 
-        long id = idService.generateNext();
-        customers.add(new Kunde(id, username, email, birthdate));
-        return id;
+        long customerID = idService.generateNext();
+        customers.add(new Kunde(customerID, username, email, birthdate));
+        logService.logEvent("CREATE_CUSTOMER", customerID);
+
+        return customerID;
     }
 
     @Override

@@ -3,8 +3,10 @@ import client.PerformanceClient;
 import client.TicketShop;
 import idservice.IDServiceParallel;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //Regular Client
         /*IDServiceParallel idService = new IDServiceParallel(10000);
         TicketShop ticketShop = new TicketShop(idService);
