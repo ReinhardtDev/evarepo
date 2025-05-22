@@ -80,13 +80,16 @@ public class IDServiceParallel {
         Future<?> idTask = executor.submit(this::generateNext);
 
         try {
-            long id = bucketTask.get();
-            return id;
+            return bucketTask.get();
 
         } catch (InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();
             System.err.println("Task execution failed: " + e.getMessage());
         }
         throw new RuntimeException("Task execution failed");
+    }
+
+    public void shutdown() {
+        executor.shutdown();
     }
 }

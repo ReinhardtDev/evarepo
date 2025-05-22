@@ -16,6 +16,7 @@ public class Main {
         TicketShop ticketShop = new TicketShop(idService);
         PerformanceClient performanceClient = new PerformanceClient(ticketShop);
         performanceClient.run();
+        idService.shutdown();
 
         //Parallel IDService speed test
         /*IDServiceParallel idServiceParallel = new IDServiceParallel();

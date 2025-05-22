@@ -33,7 +33,7 @@ public class PerformanceClient {
             List<CompletableFuture<Long>> futures = IntStream.range(0, count)
                     .mapToObj(i -> CompletableFuture.supplyAsync(() ->
                             eventService.createEvent("Name " + i, "Location " + i,
-                                    LocalDate.now().plusDays(1), 20000000), executorService))
+                                    LocalDate.now().plusDays(1), 50000), executorService))
                     .collect(Collectors.toList());
 
             return futures.stream()
@@ -115,6 +115,13 @@ public class PerformanceClient {
         } finally {
             executorService.shutdown();
         }
+
+        int totalQuota = 0;
+        List<Event> events = eventService.getAllEvents();
+        for (Event event : events) {
+            totalQuota += event.getQuota();
+        }
+        System.out.println("Total quota: " + totalQuota);
 
         long endTime = System.nanoTime();
         long elapsedTime = (endTime - startTime) / 1000000;

@@ -36,7 +36,7 @@ public class TicketService implements TicketServiceInterface {
 
 
     @Override
-    public long createTicket(LocalDate purchaseDate, long customerId, long eventId) {
+    public synchronized long createTicket(LocalDate purchaseDate, long customerId, long eventId) {
         Event event = eventService.getEventById(eventId);
         int eventQuota = event.getQuota();
         if (eventQuota <= 0) {

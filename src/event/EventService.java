@@ -25,7 +25,7 @@ public class EventService implements EventServiceInterface {
 
 
     @Override
-    public long createEvent(String title, String location, LocalDate date, int quota) {
+    public synchronized long createEvent(String title, String location, LocalDate date, int quota) {
         if (quota < 0) {
             throw new IllegalArgumentException("The quota must not be negative!");
         }
@@ -74,7 +74,7 @@ public class EventService implements EventServiceInterface {
 
     private IDServiceParallel idService;
 
-    public void reduceQuota(Event event){
+    public synchronized void reduceQuota(Event event){
         event.setQuota(event.getQuota() - 1);
     }
 }

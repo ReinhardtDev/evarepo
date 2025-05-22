@@ -33,7 +33,7 @@ public class CustomerService implements CustomerServiceInterface {
     }
 
     @Override
-    public long createCustomer(String username, String email, LocalDate birthdate) {
+    public synchronized long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
