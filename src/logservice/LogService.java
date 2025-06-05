@@ -1,5 +1,7 @@
 package logservice;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,10 +12,12 @@ public class LogService implements LogServiceInterface {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     private static final String LOG_FILE = "log.txt";
     private static final FileWriter writer;
+    private static final BufferedWriter bufferedWriter;
 
     static {
         try {
             writer = new FileWriter(LOG_FILE, true);
+            bufferedWriter = new BufferedWriter(writer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +37,8 @@ public class LogService implements LogServiceInterface {
     public void logEvent(String eventType, Long eventId) {
         String logMessage = formatLogMessage(eventType, eventId);
         try {
-            writer.write(logMessage + System.lineSeparator());
+            bufferedWriter.write(logMessage + System.lineSeparator());
+            bufferedWriter.flush();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
