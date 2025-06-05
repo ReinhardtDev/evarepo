@@ -53,7 +53,7 @@ public class TicketService implements TicketServiceInterface {
             throw new RuntimeException("Customer has purchased max amount of tickets");
         }
 
-        long id = idService.generateNext();
+        long id = idService.getID();
         tickets.add(new Ticket(id, purchaseDate, customerId, eventId));
         eventService.reduceQuota(event);
         logService.logEvent("CREATE_TICKET", id);

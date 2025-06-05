@@ -51,7 +51,7 @@ public class CustomerService implements CustomerServiceInterface {
             throw new IllegalArgumentException("Invalid birthdate");
         }
 
-        long customerID = idService.generateNext();
+        long customerID = idService.getID();
         customers.add(new Kunde(customerID, username, email, birthdate));
         logService.logEvent("CREATE_CUSTOMER", customerID);
 

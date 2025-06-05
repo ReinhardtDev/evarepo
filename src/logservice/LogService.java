@@ -43,7 +43,7 @@ public class LogService implements LogServiceInterface {
     private String formatLogMessage(String eventType, Long eventId) {
         return String.format("[%s] Thread-ID: %d | Event: %s | ID: %s",
                 LocalDateTime.now().format(formatter),
-                Thread.currentThread().getId(),
+                Thread.currentThread().threadId(),
                 eventType,
                 eventId != null ? eventId : "N/A");
     }

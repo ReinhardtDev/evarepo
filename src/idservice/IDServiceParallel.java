@@ -48,7 +48,7 @@ public class IDServiceParallel {
         return ids;
     }
 
-    public long generateNext() {
+    private long generateNext() {
         long id = primeNumberGenerator.generate();
         uniqueCheckMap.put(id, Boolean.TRUE);
         bucket.add(id);

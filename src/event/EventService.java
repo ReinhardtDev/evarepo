@@ -39,7 +39,7 @@ public class EventService implements EventServiceInterface {
         }
 
 
-        long id = idService.generateNext();
+        long id = idService.getID();
         events.add(new Event(id, title, location, date, quota));
 
         logService.logEvent("CREATE_EVENT", id);
