@@ -1,22 +1,22 @@
 package kundenservice;
 
-import idservice.IDService;
 import idservice.IDServiceParallel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerService implements CustomerServiceInterface {
     private ArrayList<Kunde> customers;
-    private IDService idService;
+    private IDServiceParallel idService;
     private static CustomerService INSTANCE;
 
-    public CustomerService(IDService idService) {
+    public CustomerService(IDServiceParallel idService) {
         this.idService = idService;
         this.customers = new ArrayList<>();
     }
 
-    public static CustomerService getInstance(IDService idService) {
+    public static CustomerService getInstance(IDServiceParallel idService) {
         if (INSTANCE == null) {
             INSTANCE = new CustomerService(idService);
         }
@@ -33,7 +33,7 @@ public class CustomerService implements CustomerServiceInterface {
     }
 
     @Override
-    public long createCustomer(String username, String email, LocalDate birthdate) {
+    public synchronized long createCustomer(String username, String email, LocalDate birthdate) {
         //missing check for valid email
         if(username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
@@ -47,9 +47,9 @@ public class CustomerService implements CustomerServiceInterface {
             throw new IllegalArgumentException("Invalid birthdate");
         }
 
-        long customerID = idService.generateID();
-        customers.add(new Kunde(customerID, username, email, birthdate));
-        return customerID;
+        long id = idService.generateNext();
+        customers.add(new Kunde(id, username, email, birthdate));
+        return id;
     }
 
     @Override

@@ -1,18 +1,22 @@
 package event;
 
 import idservice.IDService;
+import idservice.IDServiceParallel;
+import kundenservice.Kunde;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventService implements EventServiceInterface {
 
-    public EventService(IDService idService) {
+    public EventService(IDServiceParallel idService) {
         this.events = new ArrayList<>();
         this.idService = idService;
     }
 
-    public static EventService getInstance(IDService idService) {
+    public static EventService getInstance(IDServiceParallel idService) {
         if (INSTANCE == null) {
             INSTANCE = new EventService(idService);
         }
@@ -21,7 +25,7 @@ public class EventService implements EventServiceInterface {
 
 
     @Override
-    public long createEvent(String title, String location, LocalDate date, int quota) {
+    public synchronized long createEvent(String title, String location, LocalDate date, int quota) {
         if (quota < 0) {
             throw new IllegalArgumentException("The quota must not be negative!");
         }
@@ -30,12 +34,11 @@ public class EventService implements EventServiceInterface {
             throw new IllegalArgumentException("The event must take place in the future!");
         }
 
-        long id = idService.generateID();
-        if (id == -1) {
-            throw new IllegalArgumentException("Couldn't generate an ID!");
-        }
+
+        long id = idService.generateNext();
         events.add(new Event(id, title, location, date, quota));
         return id;
+
     }
 
     @Override
@@ -69,9 +72,9 @@ public class EventService implements EventServiceInterface {
 
     private ArrayList<Event> events;
 
-    private IDService idService;
+    private IDServiceParallel idService;
 
-    public void reduceQuota(Event event){
+    public synchronized void reduceQuota(Event event){
         event.setQuota(event.getQuota() - 1);
     }
 }

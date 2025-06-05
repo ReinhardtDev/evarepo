@@ -1,12 +1,10 @@
+package client;
+
 import event.Event;
-import event.EventService;
 import event.EventServiceInterface;
-import idservice.IDService;
-import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import ticketservice.Ticket;
-import ticketservice.TicketService;
 import ticketservice.TicketServiceInterface;
 
 import java.time.LocalDate;
@@ -262,6 +260,10 @@ public class Client {
             LocalDate geburtsdatum = LocalDate.parse(newKundenScanner.nextLine());
 
             long c = kundeService.createCustomer(name, email, geburtsdatum);
+            if(c == -1) {
+                System.out.println("Customer creation failed");
+                return;
+            }
             System.out.println("Customer with ID " + c + " successfully created\n");
             readUserChoice();
         } catch (Exception e) {

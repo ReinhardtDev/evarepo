@@ -26,7 +26,6 @@ public class PrimeNumberGenerator {
         return -1;
     }
 
-    //https://www.geeksforgeeks.org/java-prime-number-program/
     private boolean isPrime(long n)  {
         // Corner case
         if (n <= 1)
@@ -44,4 +43,5 @@ public class PrimeNumberGenerator {
 
         return true;
     }
+
 }

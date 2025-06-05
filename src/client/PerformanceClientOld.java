@@ -1,23 +1,21 @@
+package client;
+
 import event.Event;
-import event.EventService;
 import event.EventServiceInterface;
-import idservice.IDService;
-import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
-import ticketservice.TicketService;
 import ticketservice.TicketServiceInterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class PerformanceClient {
+public class PerformanceClientOld {
 
     private final EventServiceInterface eventService;
     private final CustomerServiceInterface customerService;
     private final TicketServiceInterface ticketService;
 
-    public PerformanceClient(TicketShop ticketShop) {
+    public PerformanceClientOld(TicketShop ticketShop) {
         this.eventService = ticketShop.getEventServiceInterface();
         this.customerService = ticketShop.getCustomerServiceInterface();
         this.ticketService = ticketShop.getTicketServiceInterface();

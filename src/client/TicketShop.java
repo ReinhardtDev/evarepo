@@ -1,6 +1,8 @@
+package client;
+
 import event.EventService;
 import event.EventServiceInterface;
-import idservice.IDService;
+import idservice.IDServiceParallel;
 import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import ticketservice.TicketService;
@@ -11,7 +13,7 @@ public class TicketShop {
     private final EventServiceInterface eventServiceInterface;
     private final TicketServiceInterface ticketServiceInterface;
 
-    public TicketShop(IDService idService) {
+    public TicketShop(IDServiceParallel idService) {
         this.customerServiceInterface = CustomerService.getInstance(idService);
         this.eventServiceInterface = EventService.getInstance(idService);
         this.ticketServiceInterface = TicketService.getInstance(idService, eventServiceInterface, customerServiceInterface);

@@ -1,30 +1,33 @@
 package ticketservice;
 import event.Event;
 import event.EventServiceInterface;
+import idservice.IDServiceParallel;
 import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import event.EventService;
 import idservice.IDService;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TicketService implements TicketServiceInterface {
     private final EventServiceInterface eventService;
     private final CustomerServiceInterface customerService;
     private ArrayList<Ticket> tickets;
-    private final IDService idService;
+    private final IDServiceParallel idService;
     private static TicketService INSTANCE;
 
-    public TicketService(IDService idService, EventServiceInterface eventService, CustomerServiceInterface customerService) {
+    public TicketService(IDServiceParallel idService, EventServiceInterface eventService, CustomerServiceInterface customerService) {
         this.idService = idService;
         this.eventService = eventService;
         this.customerService = customerService;
         this.tickets = new ArrayList<>();
     }
 
-    public static TicketService getInstance(IDService idservice, EventServiceInterface eventService, CustomerServiceInterface customerService) {
+    public static TicketService getInstance(IDServiceParallel idservice, EventServiceInterface eventService, CustomerServiceInterface customerService) {
         if (INSTANCE == null) {
             INSTANCE = new TicketService(idservice, eventService, customerService);
         }
@@ -33,7 +36,7 @@ public class TicketService implements TicketServiceInterface {
 
 
     @Override
-    public long createTicket(LocalDate purchaseDate, long customerId, long eventId) {
+    public synchronized long createTicket(LocalDate purchaseDate, long customerId, long eventId) {
         Event event = eventService.getEventById(eventId);
         int eventQuota = event.getQuota();
         if (eventQuota <= 0) {
@@ -46,10 +49,10 @@ public class TicketService implements TicketServiceInterface {
             throw new RuntimeException("Customer has purchased max amount of tickets");
         }
 
-        long ticketId = idService.generateID();
-        tickets.add(new Ticket(ticketId, purchaseDate, customerId, eventId));
+        long id = idService.generateNext();
+        tickets.add(new Ticket(id, purchaseDate, customerId, eventId));
         eventService.reduceQuota(event);
-        return ticketId;
+        return id;
     }
 
     @Override
