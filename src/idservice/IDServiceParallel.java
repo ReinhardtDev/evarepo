@@ -77,7 +77,7 @@ public class IDServiceParallel {
     public long getID() {
         Future<Long> bucketTask = executor.submit(bucket::take);
 
-        Future<?> idTask = executor.submit(this::generateNext);
+        executor.submit(this::generateNext);
 
         try {
             return bucketTask.get();

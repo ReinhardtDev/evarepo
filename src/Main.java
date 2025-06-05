@@ -1,6 +1,4 @@
-import client.Client;
-import client.PerformanceClient;
-import client.TicketShop;
+import client.*;
 import idservice.IDServiceParallel;
 
 import java.io.IOException;
@@ -14,11 +12,11 @@ public class Main {
         client.readUserChoice();*/
 
         //Performance Client
-        IDServiceParallel idService = new IDServiceParallel();
+        /*IDServiceParallel idService = new IDServiceParallel();
         TicketShop ticketShop = new TicketShop(idService);
         PerformanceClient performanceClient = new PerformanceClient(ticketShop);
         performanceClient.run();
-        idService.shutdown();
+        idService.shutdown();*/
 
         //Parallel IDService speed test
         /*IDServiceParallel idServiceParallel = new IDServiceParallel();
@@ -27,5 +25,10 @@ public class Main {
         long endTime = System.nanoTime();
         long elapsedTime = (endTime - startTime) / 1000000;
         System.out.println("Elapsed time: " + elapsedTime + " ms");*/
+
+        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
+        TestClient testClient = new TestClient(ticketShopServer);
+        testClient.callService();
     }
 }
