@@ -7,6 +7,8 @@ import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import event.EventService;
 import idservice.IDService;
+import logservice.LogService;
+import logservice.LogServiceInterface;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -19,12 +21,14 @@ public class TicketService implements TicketServiceInterface {
     private ArrayList<Ticket> tickets;
     private final IDServiceParallel idService;
     private static TicketService INSTANCE;
+    private LogServiceInterface logService;
 
     public TicketService(IDServiceParallel idService, EventServiceInterface eventService, CustomerServiceInterface customerService) {
         this.idService = idService;
         this.eventService = eventService;
         this.customerService = customerService;
         this.tickets = new ArrayList<>();
+        this.logService = LogService.getInstance();
     }
 
     public static TicketService getInstance(IDServiceParallel idservice, EventServiceInterface eventService, CustomerServiceInterface customerService) {
@@ -52,6 +56,7 @@ public class TicketService implements TicketServiceInterface {
         long id = idService.generateNext();
         tickets.add(new Ticket(id, purchaseDate, customerId, eventId));
         eventService.reduceQuota(event);
+        logService.logEvent("CREATE_TICKET", id);
         return id;
     }
 

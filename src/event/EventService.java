@@ -3,6 +3,8 @@ package event;
 import idservice.IDService;
 import idservice.IDServiceParallel;
 import kundenservice.Kunde;
+import logservice.LogService;
+import logservice.LogServiceInterface;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -10,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventService implements EventServiceInterface {
+    private LogServiceInterface logService;
 
     public EventService(IDServiceParallel idService) {
         this.events = new ArrayList<>();
         this.idService = idService;
+        this.logService = LogService.getInstance();
     }
 
     public static EventService getInstance(IDServiceParallel idService) {
@@ -37,6 +41,8 @@ public class EventService implements EventServiceInterface {
 
         long id = idService.generateNext();
         events.add(new Event(id, title, location, date, quota));
+
+        logService.logEvent("CREATE_EVENT", id);
         return id;
 
     }
