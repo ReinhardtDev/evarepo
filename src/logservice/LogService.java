@@ -9,6 +9,15 @@ public class LogService implements LogServiceInterface {
     private static LogService instance;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     private static final String LOG_FILE = "log.txt";
+    private static final FileWriter writer;
+
+    static {
+        try {
+            writer = new FileWriter(LOG_FILE, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private LogService() {
 
@@ -23,11 +32,12 @@ public class LogService implements LogServiceInterface {
 
     public void logEvent(String eventType, Long eventId) {
         String logMessage = formatLogMessage(eventType, eventId);
-        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+        try {
             writer.write(logMessage + System.lineSeparator());
         } catch (IOException e) {
-            System.err.println("Fehler beim Schreiben in die Log-Datei: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
+
     }
 
     private String formatLogMessage(String eventType, Long eventId) {
