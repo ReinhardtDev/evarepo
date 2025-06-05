@@ -6,6 +6,10 @@ import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import ticketservice.TicketServiceInterface;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +108,13 @@ public class PerformanceClient {
 
     public void run() {
         long startTime = System.nanoTime();
+        try {
+            BufferedWriter writer11 = new BufferedWriter(new FileWriter("log.txt"));
+            writer11.write("Logs: \n");
+            writer11.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             // Sequenzielle Ausführung der Phasen mit Parallelisierung innerhalb jeder Phase
