@@ -9,7 +9,6 @@ public class TcpClient {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private Thread readerThread;
 
     public TcpClient(String host, int port) {
         this.host = host;

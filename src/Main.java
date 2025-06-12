@@ -1,6 +1,11 @@
 import client.*;
+import event.EventService;
+import event.ServerEventService;
+import event.ServerEventServiceInterface;
 import idservice.IDServiceParallel;
 import server.TCPServer;
+import ticketservice.TicketService;
+import ticketservice.TicketServiceInterface;
 
 import java.io.IOException;
 

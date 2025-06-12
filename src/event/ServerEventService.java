@@ -37,7 +37,7 @@ public class ServerEventService implements ServerEventServiceInterface {
             throw new IllegalArgumentException("The event must take place in the future!");
         }
 
-        String call = "create, event" + title + ", " + location + ", " + date + ", " + quota;
+        String call = "create,event," + title + "," + location + "," + date + "," + quota;
 
         String result = connect(call);
         System.out.println("Result: " + result);
