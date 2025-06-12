@@ -16,13 +16,13 @@ import ticketservice.TicketServiceInterface;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class TicketShopServer {
+public class ServerTicketShop {
     private final CustomerServiceInterface customerServiceInterface;
     private final EventServiceInterface eventServiceInterface;
     private final TicketServiceInterface ticketServiceInterface;
     private final LogServiceInterface logServiceInterface;
 
-    public TicketShopServer(IDServiceParallel idService) throws IOException {
+    public ServerTicketShop(IDServiceParallel idService) throws IOException {
         this.customerServiceInterface = CustomerService.getInstance(idService);
         this.eventServiceInterface = EventService.getInstance(idService);
         this.ticketServiceInterface = TicketService.getInstance(idService, eventServiceInterface, customerServiceInterface);

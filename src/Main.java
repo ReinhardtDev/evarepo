@@ -1,8 +1,6 @@
 import client.*;
 import idservice.IDServiceParallel;
 import server.TCPServer;
-import ticketservice.TicketService;
-import ticketservice.TicketServiceInterface;
 
 import java.io.IOException;
 
@@ -30,14 +28,14 @@ public class Main {
         System.out.println("Elapsed time: " + elapsedTime + " ms");*/
 
         /*IDServiceParallel idServiceParallel = new IDServiceParallel();
-        TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
-        TestClient testClient = new TestClient(ticketShopServer);
+        ServerTicketShop serverTicketShop = new ServerTicketShop(idServiceParallel);
+        TestClient testClient = new TestClient(serverTicketShop);
         testClient.callService();*/
 
         IDServiceParallel idServiceParallel = new IDServiceParallel();
-        TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
+        ServerTicketShop serverTicketShop = new ServerTicketShop(idServiceParallel);
         int port = 12345;
-        TCPServer server = new TCPServer(port, ticketShopServer);
+        TCPServer server = new TCPServer(port, serverTicketShop);
         server.start();
         TcpClient tcpClient = new TcpClient("localhost", port);
         tcpClient.startInteractive();

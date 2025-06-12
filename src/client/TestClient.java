@@ -4,17 +4,15 @@ import event.EventServiceInterface;
 import kundenservice.CustomerServiceInterface;
 import ticketservice.TicketServiceInterface;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.Scanner;
 
 public class TestClient {
     private final EventServiceInterface eventService;
     private final CustomerServiceInterface customerService;
     private final TicketServiceInterface ticketService;
-    private final TicketShopServer ticketShop;
+    private final ServerTicketShop ticketShop;
 
-    public TestClient(TicketShopServer ticketShop) {
+    public TestClient(ServerTicketShop ticketShop) {
         this.eventService = ticketShop.getEventServiceInterface();
         this.customerService = ticketShop.getCustomerServiceInterface();
         this.ticketService = ticketShop.getTicketServiceInterface();

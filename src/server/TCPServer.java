@@ -1,6 +1,6 @@
 package server;
 
-import client.TicketShopServer;
+import client.ServerTicketShop;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -11,10 +11,10 @@ import java.util.concurrent.Executors;
 public class TCPServer {
     private final int port;
     private ServerSocket serverSocket;
-    TicketShopServer ticketShop;
+    ServerTicketShop ticketShop;
     ExecutorService threadPool = Executors.newCachedThreadPool();
 
-    public TCPServer(int port, TicketShopServer ticketShop) throws IOException {
+    public TCPServer(int port, ServerTicketShop ticketShop) throws IOException {
         this.ticketShop = ticketShop;
         this.port = port;
     }
