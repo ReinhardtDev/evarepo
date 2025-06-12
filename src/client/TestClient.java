@@ -20,8 +20,9 @@ public class TestClient {
     }
 
     public String callService() {
+        Scanner scanner = new Scanner(System.in);
         while (true) {
-            Scanner scanner = new Scanner(System.in);
+            System.out.println("Format: <service>,<command>,<parameter>");
             String serviceCall = scanner.nextLine();
             try {
                 String value = ticketShop.callService(serviceCall);
