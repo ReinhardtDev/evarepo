@@ -11,16 +11,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class TcpClient {
-    private final EventServiceInterface eventService;
-    private final CustomerServiceInterface customerService;
-    private final TicketServiceInterface ticketService;
-    private final TicketShopServer ticketShop;
 
-    public TcpClient(TicketShopServer ticketShop) {
-        this.eventService = ticketShop.getEventServiceInterface();
-        this.customerService = ticketShop.getCustomerServiceInterface();
-        this.ticketService = ticketShop.getTicketServiceInterface();
-        this.ticketShop = ticketShop;
+    public TcpClient() {
     }
 
     public String getResult() {

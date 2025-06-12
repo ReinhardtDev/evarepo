@@ -33,9 +33,7 @@ public class Main {
         TestClient testClient = new TestClient(ticketShopServer);
         testClient.callService();*/
 
-        IDServiceParallel idServiceParallel = new IDServiceParallel();
-        TicketShopServer ticketService = new TicketShopServer(idServiceParallel);
-        TcpClient tcpClient = new TcpClient(ticketService);
+        TcpClient tcpClient = new TcpClient();
         tcpClient.getResult();
     }
 }
