@@ -9,13 +9,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TCPServer {
-    private int port = 5000;
-    private ServerSocket serverSocket = new ServerSocket(port);
+    private final int port;
+    private ServerSocket serverSocket;
     TicketShopServer ticketShop;
     ExecutorService threadPool = Executors.newCachedThreadPool();
 
-    public TCPServer(TicketShopServer ticketShop) throws IOException {
+    public TCPServer(int port, TicketShopServer ticketShop) throws IOException {
         this.ticketShop = ticketShop;
+        this.port = port;
     }
 
     public void start() {

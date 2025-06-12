@@ -69,8 +69,8 @@ public class Kunde {
 
     @Override
     public String toString(){
-        return "username='" + this.nutzername + '\'' + ",\n" +
-                "email='" + this.email + '\'' + ",\n" +
-                "birthdate=" + this.geburtsdatum + ",\n" +
-                "id=" + id;    }
+        return "username='" + this.nutzername + '\'' +
+                ", email='" + this.email + '\'' +
+                ", birthdate=" + this.geburtsdatum +
+                ", id=" + id;    }
 }

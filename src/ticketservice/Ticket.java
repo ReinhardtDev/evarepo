@@ -49,8 +49,8 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return "ticket id='" + this.id + '\'' + ",\n" +
-                "purchase date='" + this.purchaseDate + '\'' + ",\n" +
-                "customer id=" + this.customerId + ",\n" +
-                "event id=" + id;     }
+        return "ticket id='" + this.id + '\'' +
+                ", purchase date='" + this.purchaseDate + '\'' +
+                ", customer id=" + this.customerId +
+                ", event id=" + id;     }
 }

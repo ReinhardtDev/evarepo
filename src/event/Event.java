@@ -26,11 +26,11 @@ public class Event {
 
     @Override
     public String toString() {
-        return "title='" + title + '\'' + ",\n" +
-                "place='" + location + '\'' + ",\n" +
-                "date=" + date + ",\n" +
-                "quota=" + quota + ",\n" +
-                "id=" + id;
+        return "title='" + title + '\'' +
+                ", place='" + location + '\'' +
+                ", date=" + date +
+                ", quota=" + quota +
+                ", id=" + id;
     }
 
     public long getId() {

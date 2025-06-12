@@ -36,9 +36,10 @@ public class Main {
 
         IDServiceParallel idServiceParallel = new IDServiceParallel();
         TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
-        TCPServer server = new TCPServer(ticketShopServer);
+        int port = 12345;
+        TCPServer server = new TCPServer(port, ticketShopServer);
         server.start();
-        TcpClient tcpClient = new TcpClient("localhost", 5000);
+        TcpClient tcpClient = new TcpClient("localhost", port);
         tcpClient.startInteractive();
     }
 }
