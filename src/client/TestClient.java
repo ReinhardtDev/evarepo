@@ -4,6 +4,8 @@ import event.EventServiceInterface;
 import kundenservice.CustomerServiceInterface;
 import ticketservice.TicketServiceInterface;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Scanner;
 
 public class TestClient {

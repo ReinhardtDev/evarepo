@@ -1,5 +1,7 @@
 import client.*;
 import idservice.IDServiceParallel;
+import ticketservice.TicketService;
+import ticketservice.TicketServiceInterface;
 
 import java.io.IOException;
 
@@ -26,9 +28,14 @@ public class Main {
         long elapsedTime = (endTime - startTime) / 1000000;
         System.out.println("Elapsed time: " + elapsedTime + " ms");*/
 
-        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        /*IDServiceParallel idServiceParallel = new IDServiceParallel();
         TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
         TestClient testClient = new TestClient(ticketShopServer);
-        testClient.callService();
+        testClient.callService();*/
+
+        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        TicketShopServer ticketService = new TicketShopServer(idServiceParallel);
+        TcpClient tcpClient = new TcpClient(ticketService);
+        tcpClient.getResult();
     }
 }
