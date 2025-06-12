@@ -1,12 +1,15 @@
 package client;
 
+import event.Event;
 import event.EventService;
 import event.EventServiceInterface;
 import idservice.IDServiceParallel;
 import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
+import kundenservice.Kunde;
 import logservice.LogService;
 import logservice.LogServiceInterface;
+import ticketservice.Ticket;
 import ticketservice.TicketService;
 import ticketservice.TicketServiceInterface;
 
@@ -57,7 +60,8 @@ public class TicketShopServer {
         switch (operationName) {
             case "create":
                 long id = eventServiceInterface.createEvent(arguments[0], arguments[1], LocalDate.parse(arguments[2]), Integer.parseInt(arguments[3]));
-                return Long.toString(id);
+                Event event = eventServiceInterface.getEventById(id);
+                return event.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
@@ -67,7 +71,8 @@ public class TicketShopServer {
         switch (operationName) {
             case "create":
                 long id = customerServiceInterface.createCustomer(arguments[0], arguments[1], LocalDate.parse(arguments[2]));
-                return Long.toString(id);
+                Kunde customer = customerServiceInterface.getCustomerByID(id);
+                return customer.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
@@ -77,7 +82,8 @@ public class TicketShopServer {
         switch (operationName) {
             case "create":
                 long id = ticketServiceInterface.createTicket(LocalDate.parse(arguments[0]), Long.parseLong(arguments[1]), Long.parseLong(arguments[2]));
-                return Long.toString(id);
+                Ticket ticket = ticketServiceInterface.getTicketById(id);
+                return ticket.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
