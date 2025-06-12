@@ -1,45 +1,81 @@
-import client.TicketShopServer;
-import event.EventServiceInterface;
-import kundenservice.CustomerServiceInterface;
-import ticketservice.TicketServiceInterface;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.InetSocketAddress;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class TcpClient {
 
-    public TcpClient() {
+    private final String host;
+    private final int port;
+    private Socket socket;
+    private BufferedReader in;
+    private PrintWriter out;
+    private Thread readerThread;
+
+    public TcpClient(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
-    public String getResult() {
-        Scanner scanner = new Scanner(System.in);
-        Socket socket = new Socket();
-        InetSocketAddress inetSocketAddress = new InetSocketAddress("localhost", 5000);
-        try {
-            socket.bind(inetSocketAddress);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+    public void connect() throws IOException {
+        socket = new Socket(host, port);
+        System.out.println("Connected with server " + host + ":" + port);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
+    }
+
+    public String send(String message) throws IOException {
+        if (socket == null || socket.isClosed()) {
+            try {
+                connect();
+            } catch (IOException e) {
+                System.err.println("Error while connecting to server: " + e.getMessage());
+                return null;
+            }
+        }
+        out.println(message);
+        String response = in.readLine();
+        return response;
+    }
+
+    public void startInteractive() {
+        if (socket == null || socket.isClosed()) {
+            try {
+                connect();
+            } catch (IOException e) {
+                System.err.println("Error while connecting to server: " + e.getMessage());
+                return;
+            }
         }
 
-        try(DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            DataInputStream in = new DataInputStream(socket.getInputStream());) {
-            while (true) {
-                System.out.println("Format: <service>,<command>,<parameter>");
-                String serviceCall = scanner.nextLine();
-                try {
-                    out.writeUTF(serviceCall);
-                    String output = in.readUTF();
-                    System.out.println(output);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter message (" + host + ":" + port + "), 'exit' to exit:");
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("exit")) {
+                break;
             }
+            try {
+                String antwort = send(input);
+                if (antwort != null) {
+                    System.out.println("Answer: " + antwort);
+                }
+            } catch (IOException e) {
+                System.err.println("Error while sending: " + e.getMessage());
+                break;
+            }
+        }
+
+        close();
+    }
+
+    public void close() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            System.out.println("Connection closed.");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error while closing: " + e.getMessage());
         }
     }
 }

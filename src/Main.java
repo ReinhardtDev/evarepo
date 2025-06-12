@@ -1,5 +1,6 @@
 import client.*;
 import idservice.IDServiceParallel;
+import server.TCPServer;
 import ticketservice.TicketService;
 import ticketservice.TicketServiceInterface;
 
@@ -33,7 +34,11 @@ public class Main {
         TestClient testClient = new TestClient(ticketShopServer);
         testClient.callService();*/
 
-        TcpClient tcpClient = new TcpClient();
-        tcpClient.getResult();
+        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        TicketShopServer ticketShopServer = new TicketShopServer(idServiceParallel);
+        TCPServer server = new TCPServer(ticketShopServer);
+        server.start();
+        TcpClient tcpClient = new TcpClient("localhost", 5000);
+        tcpClient.startInteractive();
     }
 }
