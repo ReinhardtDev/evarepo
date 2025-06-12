@@ -107,6 +107,11 @@ public class TicketService implements TicketServiceInterface {
         return event.getTickets().contains(ticket);
 
     }
+
+    @Override
+    public ArrayList<Ticket> getAllTickets() {
+        return tickets;
+    }
 }
 
 

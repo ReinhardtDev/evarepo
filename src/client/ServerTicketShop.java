@@ -15,6 +15,7 @@ import ticketservice.TicketServiceInterface;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class ServerTicketShop {
     private final CustomerServiceInterface customerServiceInterface;
@@ -36,8 +37,8 @@ public class ServerTicketShop {
         } else if (temp.length == 1) {
             System.out.println("Invalid operation");
         }
-        String serviceName = temp[0];
-        String operationName = temp[1];
+        String serviceName = temp[1];
+        String operationName = temp[0];
         String args = "";
         if (temp.length > 2) {
             args = temp[2];
@@ -62,6 +63,9 @@ public class ServerTicketShop {
                 long id = eventServiceInterface.createEvent(arguments[0], arguments[1], LocalDate.parse(arguments[2]), Integer.parseInt(arguments[3]));
                 Event event = eventServiceInterface.getEventById(id);
                 return event.toString();
+            case "readAll":
+                ArrayList<Event> events = eventServiceInterface.getAllEvents();
+                return events.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
@@ -73,6 +77,9 @@ public class ServerTicketShop {
                 long id = customerServiceInterface.createCustomer(arguments[0], arguments[1], LocalDate.parse(arguments[2]));
                 Kunde customer = customerServiceInterface.getCustomerByID(id);
                 return customer.toString();
+            case "readAll":
+                ArrayList<Kunde> customers = customerServiceInterface.getAllCustomer();
+                return customers.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
@@ -84,6 +91,9 @@ public class ServerTicketShop {
                 long id = ticketServiceInterface.createTicket(LocalDate.parse(arguments[0]), Long.parseLong(arguments[1]), Long.parseLong(arguments[2]));
                 Ticket ticket = ticketServiceInterface.getTicketById(id);
                 return ticket.toString();
+            case "readAll":
+                ArrayList<Ticket> tickets = ticketServiceInterface.getAllTickets();
+                return tickets.toString();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }

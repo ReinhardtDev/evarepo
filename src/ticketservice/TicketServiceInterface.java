@@ -1,6 +1,7 @@
 package ticketservice;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public interface TicketServiceInterface {
     long createTicket(LocalDate purchaseDate, long customerId, long eventId);
@@ -10,4 +11,6 @@ public interface TicketServiceInterface {
     void deleteTicketById(long id);
 
     boolean isValidTicket(long ticketID);
+
+    ArrayList<Ticket> getAllTickets();
 }
