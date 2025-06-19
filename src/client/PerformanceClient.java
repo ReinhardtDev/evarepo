@@ -2,8 +2,11 @@ package client;
 
 import event.Event;
 import event.EventServiceInterface;
+import event.ServerEventServiceInterface;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
+import kundenservice.ServerCustomerServiceInterface;
+import ticketservice.ServerTicketServiceInterface;
 import ticketservice.TicketServiceInterface;
 
 import java.io.BufferedWriter;
@@ -19,13 +22,13 @@ import java.util.stream.IntStream;
 
 public class PerformanceClient {
 
-    private final EventServiceInterface eventService;
-    private final CustomerServiceInterface customerService;
-    private final TicketServiceInterface ticketService;
+    private final ServerEventServiceInterface eventService;
+    private final ServerCustomerServiceInterface customerService;
+    private final ServerTicketServiceInterface ticketService;
     private final ExecutorService executorService;
     private static final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
 
-    public PerformanceClient(TicketShop ticketShop) {
+    public PerformanceClient(ClientTicketShop ticketShop) {
         this.eventService = ticketShop.getEventServiceInterface();
         this.customerService = ticketShop.getCustomerServiceInterface();
         this.ticketService = ticketShop.getTicketServiceInterface();
