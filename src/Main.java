@@ -37,12 +37,23 @@ public class Main {
         TestClient testClient = new TestClient(serverTicketShop);
         testClient.callService();*/
 
-        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        /*IDServiceParallel idServiceParallel = new IDServiceParallel();
         ServerTicketShop serverTicketShop = new ServerTicketShop(idServiceParallel);
         int port = 12345;
         TCPServer server = new TCPServer(port, serverTicketShop);
         server.start();
         TcpClient tcpClient = new TcpClient("localhost", port);
-        tcpClient.startInteractive();
+        tcpClient.startInteractive();*/
+
+        IDServiceParallel idServiceParallel = new IDServiceParallel();
+        ServerTicketShop ticketShop = new ServerTicketShop(idServiceParallel);
+        int port = 12345;
+        TCPServer server =  new TCPServer(port, ticketShop);
+        server.start();
+        ClientTicketShop clientTicketShop = new ClientTicketShop(idServiceParallel, port);
+
+
+        ClientHaha client = new ClientHaha(clientTicketShop);
+        client.readUserChoice();
     }
 }

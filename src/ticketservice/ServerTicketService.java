@@ -1,12 +1,14 @@
 package ticketservice;
 import event.Event;
 import event.EventServiceInterface;
+import event.ServerEventServiceInterface;
 import idservice.IDServiceParallel;
 import kundenservice.CustomerService;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
 import event.EventService;
 import idservice.IDService;
+import kundenservice.ServerCustomerServiceInterface;
 import logservice.LogService;
 import logservice.LogServiceInterface;
 
@@ -21,43 +23,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerTicketService implements ServerTicketServiceInterface {
-    private final EventServiceInterface eventService;
-    private final CustomerServiceInterface customerService;
+    private final ServerEventServiceInterface eventService;
+    private final ServerCustomerServiceInterface customerService;
     private ArrayList<Ticket> tickets;
     private final IDServiceParallel idService;
     private static ServerTicketService INSTANCE;
     private LogServiceInterface logService;
+    private Socket socket;
 
-    public ServerTicketService(IDServiceParallel idService, EventServiceInterface eventService, CustomerServiceInterface customerService, int port) {
+    public ServerTicketService(IDServiceParallel idService, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket) {
         this.idService = idService;
         this.eventService = eventService;
         this.customerService = customerService;
         this.tickets = new ArrayList<>();
         this.logService = LogService.getInstance();
-        this.port = port;
+        this.socket = socket;
     }
 
-    public static ServerTicketService getInstance(IDServiceParallel idservice, EventServiceInterface eventService, CustomerServiceInterface customerService, int port) {
+    public static ServerTicketService getInstance(IDServiceParallel idservice, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket) {
         if (INSTANCE == null) {
-            INSTANCE = new ServerTicketService(idservice, eventService, customerService, port);
+            INSTANCE = new ServerTicketService(idservice, eventService, customerService, socket);
         }
         return INSTANCE;
     }
 
     @Override
     public synchronized void createTicket(LocalDate purchaseDate, long customerId, long eventId) {
-        Event event = eventService.getEventById(eventId);
-        int eventQuota = event.getQuota();
-        if (eventQuota <= 0) {
-            throw new RuntimeException("Event quota must be greater than zero");
-        }
-
-        Kunde kunde = customerService.getCustomerByID(customerId);
-
-        if(kunde.isMaxTicketAmount(eventId)) {
-            throw new RuntimeException("Customer has purchased max amount of tickets");
-        }
-
         String call = "create,ticket," + purchaseDate + "," + customerId + "," + eventId;
 
         String result = connect(call);
@@ -65,31 +56,21 @@ public class ServerTicketService implements ServerTicketServiceInterface {
     }
 
     private String connect(String call) {
-        if (socket == null || socket.isClosed()) {
-            try {
-                socket = new Socket("localhost", port);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(call);
-                return in.readLine();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(call);
-                return in.readLine();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } throw new RuntimeException("Connection failed!");
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(call);
+            return in.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return "";
+        }
     }
 
-    private Socket socket;
-
-    private int port;
+    public void getAllTickets() {
+        String call = "getAll,ticket";
+        String result = connect(call);
+    }
 }
 
 

@@ -77,7 +77,7 @@ public class ServerTicketShop {
                 long id = customerServiceInterface.createCustomer(arguments[0], arguments[1], LocalDate.parse(arguments[2]));
                 Kunde customer = customerServiceInterface.getCustomerByID(id);
                 return customer.toString();
-            case "readAll":
+            case "getAll":
                 ArrayList<Kunde> customers = customerServiceInterface.getAllCustomer();
                 return customers.toString();
         }
@@ -88,10 +88,22 @@ public class ServerTicketShop {
         String[] arguments = args.split(",");
         switch (operationName) {
             case "create":
+                Event event = eventServiceInterface.getEventById(Long.parseLong(arguments[2]));
+                int eventQuota = event.getQuota();
+                if (eventQuota <= 0) {
+                    throw new RuntimeException("Event quota must be greater than zero");
+                }
+
+                Kunde kunde = customerServiceInterface.getCustomerByID(Long.parseLong(arguments[1]));
+
+                if(kunde.isMaxTicketAmount(Long.parseLong(arguments[2]))) {
+                    throw new RuntimeException("Customer has purchased max amount of tickets");
+                }
+
                 long id = ticketServiceInterface.createTicket(LocalDate.parse(arguments[0]), Long.parseLong(arguments[1]), Long.parseLong(arguments[2]));
                 Ticket ticket = ticketServiceInterface.getTicketById(id);
                 return ticket.toString();
-            case "readAll":
+            case "getAll":
                 ArrayList<Ticket> tickets = ticketServiceInterface.getAllTickets();
                 return tickets.toString();
         }

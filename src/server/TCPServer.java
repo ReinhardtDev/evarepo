@@ -25,7 +25,7 @@ public class TCPServer {
                 serverSocket = new ServerSocket(port);
                 System.out.println("Server started. Listening on port " + port);
 
-                while (!serverSocket.isClosed()) {
+                while (true) {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("New Client connected: " + clientSocket.getRemoteSocketAddress());
                     threadPool.submit(new ClientHandler(clientSocket));

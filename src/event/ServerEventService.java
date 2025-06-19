@@ -12,16 +12,16 @@ import java.util.ArrayList;
 public class ServerEventService implements ServerEventServiceInterface {
     private LogServiceInterface logService;
 
-    public ServerEventService(IDServiceParallel idService, int port) {
+    public ServerEventService(IDServiceParallel idService, Socket socket) {
         this.events = new ArrayList<>();
         this.idService = idService;
         this.logService = LogService.getInstance();
-        this.port = port;
+        this.socket = socket;
     }
 
-    public static EventService getInstance(IDServiceParallel idService) {
+    public static ServerEventService getInstance(IDServiceParallel idService, Socket socket) {
         if (INSTANCE == null) {
-            INSTANCE = new EventService(idService);
+            INSTANCE = new ServerEventService(idService, socket);
         }
         return INSTANCE;
     }
@@ -44,26 +44,16 @@ public class ServerEventService implements ServerEventServiceInterface {
     }
 
     private String connect(String call) {
-        if (socket == null || socket.isClosed()) {
-            try {
-                socket = new Socket("localhost", port);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(call);
-                return in.readLine();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(call);
-                return in.readLine();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } throw new RuntimeException("Connection failed!");
+
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(call);
+            return in.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return "";
+        }
     }
 
     @Override
@@ -74,13 +64,11 @@ public class ServerEventService implements ServerEventServiceInterface {
         System.out.println("Result: " + result);
     }
 
-    private static EventService INSTANCE;
+    private static ServerEventService INSTANCE;
 
     private ArrayList<Event> events;
 
     private IDServiceParallel idService;
 
     private Socket socket;
-
-    private int port;
 }
