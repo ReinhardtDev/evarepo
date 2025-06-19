@@ -63,7 +63,7 @@ public class ServerTicketShop {
                 long id = eventServiceInterface.createEvent(arguments[0], arguments[1], LocalDate.parse(arguments[2]), Integer.parseInt(arguments[3]));
                 Event event = eventServiceInterface.getEventById(id);
                 return event.toString();
-            case "readAll":
+            case "getAll":
                 ArrayList<Event> events = eventServiceInterface.getAllEvents();
                 return events.toString();
         }

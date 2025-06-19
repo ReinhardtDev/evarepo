@@ -67,8 +67,11 @@ public class ServerEventService implements ServerEventServiceInterface {
     }
 
     @Override
-    public ArrayList<Event> getAllEvents() {
-        return events;
+    public void getAllEvents() {
+
+        String call = "getAll,event";
+        String result = connect(call);
+        System.out.println("Result: " + result);
     }
 
     private static EventService INSTANCE;
