@@ -77,8 +77,10 @@ public class ServerCustomerService implements ServerCustomerServiceInterface {
     public void getAllCustomer() {
         String call = "getAll,customer";
         ArrayList<Kunde> result = connect(call);
-
-        System.out.println(result);
+        for (Kunde kunde : result) {
+            System.out.println(kunde);
+        }
+        System.out.println("\n");
     }
 
 }

@@ -168,12 +168,14 @@ public class ClientHaha {
                         Wählen Sie 2 um ein Ticket zu stornieren,
                         Wählen Sie 3 um ein Ticket anzuzeigen,
                         Wählen Sie 4 um die Gültigkeit eines Tickets zu überprüfen,
+                        Wählen Sie 5 um alle Tickets anzuzeigen,
                         Wählen Sie 0 um einen anderen Service auszuwählen
                         """);
 
         switch (scanUserChoice()) {
             case 0 -> readUserChoice();
             case 1 -> buyNewTicket();
+            case 5 -> getAllTickets();
             default -> {
                 System.out.println("Invalid input, try again. \n");
                 readUserChoice();
@@ -196,6 +198,11 @@ public class ClientHaha {
             System.out.println(e.getMessage());
             readUserChoice();
         }
+    }
 
+    private void getAllTickets(){
+        System.out.println("Tickets:");
+        ticketService.getAllTickets();
+        readUserChoice();
     }
 }

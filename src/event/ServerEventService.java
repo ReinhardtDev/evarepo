@@ -63,6 +63,7 @@ public class ServerEventService implements ServerEventServiceInterface {
         for (Event event : result) {
             System.out.println(event);
         }
+        System.out.println("\n");
     }
 
     private static ServerEventService INSTANCE;

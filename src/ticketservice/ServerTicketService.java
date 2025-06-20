@@ -69,7 +69,10 @@ public class ServerTicketService implements ServerTicketServiceInterface {
     public void getAllTickets() {
         String call = "getAll,ticket";
         ArrayList<Ticket> result = connect(call);
-        System.out.println(result);
+        for (Ticket ticket : result) {
+            System.out.println(ticket);
+        }
+        System.out.println("\n");
     }
 }
 
