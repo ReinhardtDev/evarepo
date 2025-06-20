@@ -4,10 +4,7 @@ import idservice.IDServiceParallel;
 import logservice.LogService;
 import logservice.LogServiceInterface;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,17 +15,21 @@ public class ServerCustomerService implements ServerCustomerServiceInterface {
     private static ServerCustomerService INSTANCE;
     private LogServiceInterface logService;
     private Socket socket;
+    private PrintWriter out;
+    private ObjectInputStream in;
 
-    public ServerCustomerService(IDServiceParallel idService, Socket socket) {
+    public ServerCustomerService(IDServiceParallel idService, Socket socket, PrintWriter out, ObjectInputStream in) {
         this.idService = idService;
         this.customers = new ArrayList<>();
         this.logService = LogService.getInstance();
         this.socket = socket;
+        this.out = out;
+        this.in = in;
     }
 
-    public static ServerCustomerService getInstance(IDServiceParallel idService, Socket socket) {
+    public static ServerCustomerService getInstance(IDServiceParallel idService, Socket socket, PrintWriter out, ObjectInputStream in) {
         if (INSTANCE == null) {
-            INSTANCE = new ServerCustomerService(idService, socket);
+            INSTANCE = new ServerCustomerService(idService, socket, out, in);
         }
         return INSTANCE;
     }
@@ -44,41 +45,38 @@ public class ServerCustomerService implements ServerCustomerServiceInterface {
 
     @Override
     public synchronized void createCustomer(String username, String email, LocalDate birthdate) {
-        //missing check for valid email
         if(username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
 
-        if (!isValidEmail(email) || email.isEmpty()) {
+        /*if (!isValidEmail(email) || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid email");
-        }
+        }*/
 
         if(birthdate.isAfter(LocalDate.now().minusYears(18L))) {
             throw new IllegalArgumentException("Invalid birthdate");
         }
 
         String call = "create,customer," + username + "," + email + "," + birthdate;
-        String result = connect(call);
+        ArrayList<Kunde> result = connect(call);
 
         System.out.println(result);
     }
 
-    private String connect(String call) {
+    private ArrayList<Kunde> connect(String call) {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(call);
-            return in.readLine();
-        } catch (IOException e) {
+            return (ArrayList<Kunde>) in.readObject();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "";
+            return new ArrayList<>();
         }
     }
 
     @Override
     public void getAllCustomer() {
         String call = "getAll,customer";
-        String result = connect(call);
+        ArrayList<Kunde> result = connect(call);
 
         System.out.println(result);
     }

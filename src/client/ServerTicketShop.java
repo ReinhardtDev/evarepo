@@ -30,7 +30,7 @@ public class ServerTicketShop {
         this.logServiceInterface = LogService.getInstance();
     }
 
-    public String callService(String operation) {
+    public Object callService(String operation) {
         String[] temp = operation.split(",", 3);
         if (temp.length < 1) {
             System.out.println("Invalid operation");
@@ -56,35 +56,37 @@ public class ServerTicketShop {
         }
     }
 
-    private String callEventMethod(String operationName, String args) {
+    private ArrayList<Event> callEventMethod(String operationName, String args) {
         String[] arguments = args.split(",");
         switch (operationName) {
             case "create":
                 long id = eventServiceInterface.createEvent(arguments[0], arguments[1], LocalDate.parse(arguments[2]), Integer.parseInt(arguments[3]));
                 Event event = eventServiceInterface.getEventById(id);
-                return event.toString();
+                ArrayList<Event> events = new ArrayList<>();
+                events.add(event);
+                return events;
             case "getAll":
-                ArrayList<Event> events = eventServiceInterface.getAllEvents();
-                return events.toString();
+                return eventServiceInterface.getAllEvents();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
 
-    private String callCustomerMethod(String operationName, String args) {
+    private ArrayList<Kunde> callCustomerMethod(String operationName, String args) {
         String[] arguments = args.split(",");
         switch (operationName) {
             case "create":
                 long id = customerServiceInterface.createCustomer(arguments[0], arguments[1], LocalDate.parse(arguments[2]));
                 Kunde customer = customerServiceInterface.getCustomerByID(id);
-                return customer.toString();
+                ArrayList<Kunde> kundeList = new ArrayList<>();
+                kundeList.add(customer);
+                return kundeList;
             case "getAll":
-                ArrayList<Kunde> customers = customerServiceInterface.getAllCustomer();
-                return customers.toString();
+                return customerServiceInterface.getAllCustomer();
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }
 
-    private String callTicketMethod(String operationName, String args) {
+    private ArrayList<Ticket> callTicketMethod(String operationName, String args) {
         String[] arguments = args.split(",");
         switch (operationName) {
             case "create":
@@ -102,10 +104,12 @@ public class ServerTicketShop {
 
                 long id = ticketServiceInterface.createTicket(LocalDate.parse(arguments[0]), Long.parseLong(arguments[1]), Long.parseLong(arguments[2]));
                 Ticket ticket = ticketServiceInterface.getTicketById(id);
-                return ticket.toString();
+                ArrayList<Ticket> ticketList = new ArrayList<>();
+                ticketList.add(ticket);
+                return ticketList;
             case "getAll":
                 ArrayList<Ticket> tickets = ticketServiceInterface.getAllTickets();
-                return tickets.toString();
+                return tickets;
         }
         throw new RuntimeException("Unknown operation " + operationName);
     }

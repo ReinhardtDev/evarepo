@@ -1,8 +1,9 @@
 package ticketservice;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Ticket {
+public class Ticket implements Serializable {
     private long id;
     private LocalDate purchaseDate;
     private long customerId;
@@ -52,5 +53,5 @@ public class Ticket {
         return "ticket id='" + this.id + '\'' +
                 ", purchase date='" + this.purchaseDate + '\'' +
                 ", customer id=" + this.customerId +
-                ", event id=" + id;     }
+                ", event id=" + this.eventId;     }
 }

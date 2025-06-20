@@ -5,6 +5,7 @@ import client.ServerTicketShop;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,12 +26,13 @@ public class TCPServer {
                 serverSocket = new ServerSocket(port);
                 System.out.println("Server started. Listening on port " + port);
 
-                while (true) {
+                while (!serverSocket.isClosed()) {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("New Client connected: " + clientSocket.getRemoteSocketAddress());
                     threadPool.submit(new ClientHandler(clientSocket));
                 }
             } catch (IOException ignored) {
+                System.out.println("Server stopped");
             } finally {
                 shutdown();
             }
@@ -61,21 +63,22 @@ public class TCPServer {
         public void run() {
             try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
+                    ObjectOutputStream objOut = new ObjectOutputStream(socket.getOutputStream());
             ) {
                 String line;
                 while ((line = in.readLine()) != null) {
-                    System.out.println("Recieved message by client " + socket.getRemoteSocketAddress() + ": " + line);
+                    System.out.println("Received message by client " + socket.getRemoteSocketAddress() + ": " + line);
 
-                    String answer;
+                    Object answer;
 
                     try {
                         answer = ticketShop.callService(line);
                     } catch (Exception e) {
-                        answer = e.getMessage();
+                        System.out.println("Error while calling service " + socket.getRemoteSocketAddress() + ": " + e.getMessage());
+                        answer = new ArrayList<>();
                     }
 
-                    out.println(answer);
+                    objOut.writeObject(answer);
                 }
             } catch (IOException e) {
                 System.err.println("Error in ClientHandler: " + e.getMessage());

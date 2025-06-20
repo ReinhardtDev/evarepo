@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PerformanceClient {
-
+/*
     private final ServerEventServiceInterface eventService;
     private final ServerCustomerServiceInterface customerService;
     private final ServerTicketServiceInterface ticketService;
@@ -35,10 +35,10 @@ public class PerformanceClient {
         this.executorService = Executors.newFixedThreadPool(MAX_THREADS);
     }
 
-    public CompletableFuture<List<Long>> createEvents(int count) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<CompletableFuture<Long>> futures = IntStream.range(0, count)
-                    .mapToObj(i -> CompletableFuture.supplyAsync(() ->
+    public CompletableFuture<Void> createEvents(int count) {
+        return CompletableFuture.runAsync(() -> {
+            List<CompletableFuture<Void>> futures = IntStream.range(0, count)
+                    .mapToObj(i -> CompletableFuture.runAsync(() ->
                             eventService.createEvent("Name " + i, "Location " + i,
                                     LocalDate.now().plusDays(1), 50000), executorService))
                     .collect(Collectors.toList());
@@ -140,5 +140,5 @@ public class PerformanceClient {
         long endTime = System.nanoTime();
         long elapsedTime = (endTime - startTime) / 1000000;
         System.out.println("Elapsed time: " + elapsedTime);
-    }
+    }*/
 }

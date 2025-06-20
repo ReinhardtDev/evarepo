@@ -12,16 +12,18 @@ import java.util.ArrayList;
 public class ServerEventService implements ServerEventServiceInterface {
     private LogServiceInterface logService;
 
-    public ServerEventService(IDServiceParallel idService, Socket socket) {
+    public ServerEventService(IDServiceParallel idService, Socket socket, PrintWriter out, ObjectInputStream in) {
         this.events = new ArrayList<>();
         this.idService = idService;
         this.logService = LogService.getInstance();
         this.socket = socket;
+        this.out = out;
+        this.in = in;
     }
 
-    public static ServerEventService getInstance(IDServiceParallel idService, Socket socket) {
+    public static ServerEventService getInstance(IDServiceParallel idService, Socket socket, PrintWriter out, ObjectInputStream in) {
         if (INSTANCE == null) {
-            INSTANCE = new ServerEventService(idService, socket);
+            INSTANCE = new ServerEventService(idService, socket, out, in);
         }
         return INSTANCE;
     }
@@ -39,29 +41,28 @@ public class ServerEventService implements ServerEventServiceInterface {
 
         String call = "create,event," + title + "," + location + "," + date + "," + quota;
 
-        String result = connect(call);
-        System.out.println("Result: " + result);
+        ArrayList<Event> result = connect(call);
+        System.out.println("Result: " + result.toString());
     }
 
-    private String connect(String call) {
+    private ArrayList<Event> connect(String call) {
 
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(call);
-            return in.readLine();
-        } catch (IOException e) {
+            return (ArrayList<Event>) in.readObject();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "";
+            return new ArrayList<Event>();
         }
     }
 
     @Override
     public void getAllEvents() {
-
         String call = "getAll,event";
-        String result = connect(call);
-        System.out.println("Result: " + result);
+        ArrayList<Event> result = connect(call);
+        for (Event event : result) {
+            System.out.println(event);
+        }
     }
 
     private static ServerEventService INSTANCE;
@@ -71,4 +72,8 @@ public class ServerEventService implements ServerEventServiceInterface {
     private IDServiceParallel idService;
 
     private Socket socket;
+
+    private PrintWriter out;
+
+    private ObjectInputStream in;
 }

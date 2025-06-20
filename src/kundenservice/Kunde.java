@@ -2,10 +2,11 @@ package kundenservice;
 
 import ticketservice.Ticket;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Kunde {
+public class Kunde implements Serializable {
 
     private long id;
     private String nutzername;

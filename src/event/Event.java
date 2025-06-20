@@ -2,10 +2,11 @@ package event;
 
 import ticketservice.Ticket;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Event {
+public class Event implements Serializable {
 
     public Event(long id, String title, String location, LocalDate date, int quota) {
         this.id = id;

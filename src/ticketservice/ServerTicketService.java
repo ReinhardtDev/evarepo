@@ -12,10 +12,7 @@ import kundenservice.ServerCustomerServiceInterface;
 import logservice.LogService;
 import logservice.LogServiceInterface;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.net.Socket;
 import java.time.LocalDate;
@@ -30,19 +27,23 @@ public class ServerTicketService implements ServerTicketServiceInterface {
     private static ServerTicketService INSTANCE;
     private LogServiceInterface logService;
     private Socket socket;
+    private final PrintWriter out;
+    private final ObjectInputStream in;
 
-    public ServerTicketService(IDServiceParallel idService, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket) {
+    public ServerTicketService(IDServiceParallel idService, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket, PrintWriter out, ObjectInputStream in) {
         this.idService = idService;
         this.eventService = eventService;
         this.customerService = customerService;
         this.tickets = new ArrayList<>();
         this.logService = LogService.getInstance();
         this.socket = socket;
+        this.out = out;
+        this.in = in;
     }
 
-    public static ServerTicketService getInstance(IDServiceParallel idservice, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket) {
+    public static ServerTicketService getInstance(IDServiceParallel idservice, ServerEventServiceInterface eventService, ServerCustomerServiceInterface customerService, Socket socket, PrintWriter out, ObjectInputStream in) {
         if (INSTANCE == null) {
-            INSTANCE = new ServerTicketService(idservice, eventService, customerService, socket);
+            INSTANCE = new ServerTicketService(idservice, eventService, customerService, socket,  out, in);
         }
         return INSTANCE;
     }
@@ -51,25 +52,24 @@ public class ServerTicketService implements ServerTicketServiceInterface {
     public synchronized void createTicket(LocalDate purchaseDate, long customerId, long eventId) {
         String call = "create,ticket," + purchaseDate + "," + customerId + "," + eventId;
 
-        String result = connect(call);
-        System.out.println("Result: " + result);
+        ArrayList<Ticket> result = connect(call);
+        System.out.println(result);
     }
 
-    private String connect(String call) {
+    private ArrayList<Ticket> connect(String call) {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(call);
-            return in.readLine();
-        } catch (IOException e) {
+            return (ArrayList<Ticket>) in.readObject();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "";
+            return new ArrayList<>();
         }
     }
 
     public void getAllTickets() {
         String call = "getAll,ticket";
-        String result = connect(call);
+        ArrayList<Ticket> result = connect(call);
+        System.out.println(result);
     }
 }
 

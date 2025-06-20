@@ -52,7 +52,6 @@ public class Main {
         server.start();
         ClientTicketShop clientTicketShop = new ClientTicketShop(idServiceParallel, port);
 
-
         ClientHaha client = new ClientHaha(clientTicketShop);
         client.readUserChoice();
     }

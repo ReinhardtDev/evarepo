@@ -2,32 +2,32 @@ package client;
 
 import event.Event;
 import event.EventServiceInterface;
+import event.ServerEventServiceInterface;
 import kundenservice.CustomerServiceInterface;
 import kundenservice.Kunde;
+import kundenservice.ServerCustomerServiceInterface;
+import ticketservice.ServerTicketServiceInterface;
 import ticketservice.TicketServiceInterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PerformanceClientOld {
+/*
+    private final ServerEventServiceInterface eventService;
+    private final ServerCustomerServiceInterface customerService;
+    private final ServerTicketServiceInterface ticketService;
 
-    private final EventServiceInterface eventService;
-    private final CustomerServiceInterface customerService;
-    private final TicketServiceInterface ticketService;
-
-    public PerformanceClientOld(TicketShop ticketShop) {
+    public PerformanceClientOld(ClientTicketShop ticketShop) {
         this.eventService = ticketShop.getEventServiceInterface();
         this.customerService = ticketShop.getCustomerServiceInterface();
         this.ticketService = ticketShop.getTicketServiceInterface();
     }
 
-    public ArrayList<Long> createEvents(int count) {
-        ArrayList<Long> events = new ArrayList<>();
+    public void createEvents(int count) {
         for (int i = 0; i < count; i++) {
-            long eventId = eventService.createEvent("Name " + i, "Location " + i, LocalDate.now().plusDays(1), 20000000);
-            events.add(eventId);
+            eventService.createEvent("Name " + i, "Location " + i, LocalDate.now().plusDays(1), 20000000);
         }
-        return events;
     }
 
     public void createCustomers(int count) {
@@ -76,5 +76,5 @@ public class PerformanceClientOld {
         long elapsedTime = (endTime - startTime) / 1000000;
         System.out.println("Elapsed time: " + elapsedTime);
     }
-
+*/
 }
