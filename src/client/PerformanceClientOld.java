@@ -13,15 +13,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PerformanceClientOld {
-/*
+
     private final ServerEventServiceInterface eventService;
     private final ServerCustomerServiceInterface customerService;
     private final ServerTicketServiceInterface ticketService;
+    private final ServerTicketShop ticketShop;
 
-    public PerformanceClientOld(ClientTicketShop ticketShop) {
+    public PerformanceClientOld(ClientTicketShop ticketShop, ServerTicketShop serverTicketShop) {
         this.eventService = ticketShop.getEventServiceInterface();
         this.customerService = ticketShop.getCustomerServiceInterface();
         this.ticketService = ticketShop.getTicketServiceInterface();
+        this.ticketShop = serverTicketShop;
     }
 
     public void createEvents(int count) {
@@ -37,10 +39,10 @@ public class PerformanceClientOld {
     }
 
     public void buyOneTicketPerCustomerForEachEvent() {
-        ArrayList<Kunde> kunden = customerService.getAllCustomer();
-        ArrayList<Event> events = eventService.getAllEvents();
+        ArrayList<Event> events = (ArrayList<Event>) ticketShop.callService("getAll,event");
+        ArrayList<Kunde> customers = (ArrayList<Kunde>) ticketShop.callService("getAll,customer");
 
-        for (Kunde kunde : kunden) {
+        for (Kunde kunde : customers) {
             for (Event event : events) {
                 ticketService.createTicket(LocalDate.now(), kunde.getId(), event.getId());
             }
@@ -48,12 +50,12 @@ public class PerformanceClientOld {
     }
 
     public void buyMoreTickets() {
-        ArrayList<Long> eventIds = createEvents(100);
-        ArrayList<Event> events = new ArrayList<>();
-        ArrayList<Kunde> kunden = customerService.getAllCustomer();
+        createEvents(100);
+        ArrayList<Event> events = (ArrayList<Event>) ticketShop.callService("getAll,event");
+        ArrayList<Kunde> kunden = (ArrayList<Kunde>) ticketShop.callService("getAll,customer");
 
-        for (Long eventId : eventIds) {
-            events.add(eventService.getEventById(eventId));
+        if (events.size() > 100) {
+            events.subList(0, events.size() - 100).clear();
         }
 
         for(Event event : events) {
@@ -76,5 +78,4 @@ public class PerformanceClientOld {
         long elapsedTime = (endTime - startTime) / 1000000;
         System.out.println("Elapsed time: " + elapsedTime);
     }
-*/
 }
